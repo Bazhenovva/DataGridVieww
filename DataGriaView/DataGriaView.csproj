@@ -17,4 +17,13 @@
       <Content Include="DataGridView.csproj.user" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Update="Forms\Form1.cs">
+        <SubType>Form</SubType>
+      </Compile>
+      <Compile Update="Forms\ProductEditForm.cs">
+        <SubType>Form</SubType>
+      </Compile>
+    </ItemGroup>
+
 </Project>
