@@ -4,11 +4,17 @@ using DataGridView.Storage.Contracts;
 
 namespace DataGridView.Storage.InMemory
 {
+    /// <summary>
+    /// хранилище товаров в памяти
+    /// </summary>
     public class InMemoryProductStorage : IProductStorage
     {
         private readonly BindingList<Product> products;
         private int nextId;
 
+        /// <summary>
+        /// конструктор с тестовыми данными
+        /// </summary>
         public InMemoryProductStorage()
         {
             products = new BindingList<Product>();
@@ -20,13 +26,22 @@ namespace DataGridView.Storage.InMemory
             products.Add(new Product("Шайба", ProductSize.M6, Material.Chrome, 3, 30, 2.1m) { Id = nextId++ });
         }
 
+        /// <summary>
+        /// получить все товары
+        /// </summary>
         public BindingList<Product> GetAll() => products;
 
+        /// <summary>
+        /// добавить новый товар
+        /// </summary>
         public void Add(Product product)
         {
             products.Add(product);
         }
 
+        /// <summary>
+        /// обновить существующий товар
+        /// </summary>
         public void Update(Product product)
         {
             var existing = products.FirstOrDefault(p => p.Id == product.Id);
@@ -37,16 +52,25 @@ namespace DataGridView.Storage.InMemory
             }
         }
 
+        /// <summary>
+        /// удалить товар
+        /// </summary>
         public void Delete(Product product)
         {
             products.Remove(product);
         }
 
-        public Product GetById(int id)
+        /// <summary>
+        ///найти товар по ID
+        /// </summary>
+        public Product? GetById(int id)
         {
             return products.FirstOrDefault(p => p.Id == id);
         }
 
+        /// <summary>
+        /// получить следующий доступный ID
+        /// </summary>
         public int GetNextId() => nextId++;
     }
 }

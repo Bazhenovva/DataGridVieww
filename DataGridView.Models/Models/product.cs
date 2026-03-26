@@ -1,58 +1,95 @@
 using System.ComponentModel.DataAnnotations;
 using DataGridView.Models.Constants;
 
-namespace DataGridView.Models.Models;
-
-public class Product
+namespace DataGridView.Models.Models
 {
-    public int Id { get; set; }
-
-    [Required(ErrorMessage = "Введите название товара")]
-    [StringLength(100, MinimumLength = 3, ErrorMessage = "Название должно быть от 3 до 100 символов")]
-    public string ProductName { get; set; }
-
-    public ProductSize ProductSize { get; set; }
-
-    public Material Material { get; set; }
-
-    [Range(0.01, 999999, ErrorMessage = "Цена должна быть от 0.01 до 999999")]
-    public decimal Price { get; set; }
-
-    [Range(0, 1000, ErrorMessage = "Мин. запас должен быть от 0 до 1000")]
-    public int MinQuantity { get; set; }
-
-    [Range(0, 100, ErrorMessage = "Количество должно быть от 0 до 100")]
-    public int Quantity
+    /// <summary>
+    /// Модель товара для реестра
+    /// </summary>
+    public class Product
     {
-        get;
-        set => field = Math.Clamp(value, AppConstants.QuantityMin, AppConstants.QuantityMax);
-    }
+        /// <summary>
+        /// Уникальный идентификатор товара
+        /// </summary>
+        public int Id { get; set; }
 
-    public decimal TotalAmount => Quantity * Price;
+        /// <summary>
+        /// Название товара с валидацией по длине
+        /// </summary>
+        [Required(ErrorMessage = "Введите название товара")]
+        [StringLength(AppConstants.ProductNameMaxLength, MinimumLength = AppConstants.ProductNameMinLength, ErrorMessage = "Название должно быть от 3 до 100 символов")]
+        public string ProductName { get; set; }
 
-    public Product(string productName, ProductSize productSize, Material material, int quantity, int minQuantity, decimal price)
-    {
-        ProductName = productName;
-        ProductSize = productSize;
-        Material = material;
-        Quantity = quantity;
-        MinQuantity = minQuantity;
-        Price = price;
-    }
+        /// <summary>
+        /// Размер товара
+        /// </summary>
+        public ProductSize ProductSize { get; set; }
 
-    public Product() : this("", ProductSize.M6, Material.Steel, 0, 0, 0m) { }
+        /// <summary>
+        /// Материал товара
+        /// </summary>
+        public Material Material { get; set; }
 
-    public Product Clone()
-    {
-        return new Product
+        /// <summary>
+        /// Цена товара с валидацией по диапазону
+        /// </summary>
+        [Range(typeof(decimal), "0.01", "999999", ErrorMessage = "Цена должна быть от 0.01 до 999999")]
+        public decimal Price { get; set; }
+
+        /// <summary>
+        /// Минимальный запас товара с валидацией по диапазону
+        /// </summary>
+        [Range(0, 1000, ErrorMessage = "Мин. запас должен быть от 0 до 1000")]
+        public int MinQuantity { get; set; }
+
+        /// <summary>
+        /// Количество товара на складе с валидацией и автоматическим ограничением
+        /// </summary>
+        [Range(0, 100, ErrorMessage = "Количество должно быть от 0 до 100")]
+        public int Quantity
         {
-            Id = Id,
-            ProductName = ProductName,
-            ProductSize = ProductSize,
-            Material = Material,
-            Quantity = Quantity,
-            MinQuantity = MinQuantity,
-            Price = Price
-        };
+            get;
+            set => field = Math.Clamp(value, AppConstants.QuantityMin, AppConstants.QuantityMax);
+        }
+
+        /// <summary>
+        /// Общая сумма товара (вычисляемое свойство)
+        /// </summary>
+        public decimal TotalAmount => Quantity * Price;
+
+        /// <summary>
+        /// Конструктор с параметрами для создания товара
+        /// </summary>
+        public Product(string productName, ProductSize productSize, Material material, int quantity, int minQuantity, decimal price)
+        {
+            ProductName = productName;
+            ProductSize = productSize;
+            Material = material;
+            Quantity = quantity;
+            MinQuantity = minQuantity;
+            Price = price;
+        }
+
+        /// <summary>
+        /// Конструктор по умолчанию с начальными значениями
+        /// </summary>
+        public Product() : this("", ProductSize.M6, Material.Steel, 0, 0, 0m) { }
+
+        /// <summary>
+        /// Создание копии товара
+        /// </summary>
+        public Product Clone()
+        {
+            return new Product
+            {
+                Id = Id,
+                ProductName = ProductName,
+                ProductSize = ProductSize,
+                Material = Material,
+                Quantity = Quantity,
+                MinQuantity = MinQuantity,
+                Price = Price
+            };
+        }
     }
 }

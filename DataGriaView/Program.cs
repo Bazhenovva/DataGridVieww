@@ -1,6 +1,4 @@
 using DataGriaView.Forms;
-using DataGridView;
-using DataGridView.Services;
 using DataGridView.Services.Services;
 using DataGridView.Storage.InMemory;
 
