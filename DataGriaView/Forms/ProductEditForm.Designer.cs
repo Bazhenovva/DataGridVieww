@@ -1,4 +1,4 @@
-namespace DataGridView
+namespace DataGriaView.Forms
 {
     partial class ProductEditForm
     {

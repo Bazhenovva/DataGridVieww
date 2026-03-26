@@ -1,4 +1,4 @@
-namespace DataGridView
+namespace DataGridView.Models.Constants
 {
     public static class AppConstants
     {

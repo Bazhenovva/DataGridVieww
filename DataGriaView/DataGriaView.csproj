@@ -14,7 +14,14 @@
 
     <ItemGroup>
       <Content Include="DataGridView.csproj" />
-      <Content Include="DataGridView.csproj.user" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DataGridView.Models\DataGridView.Models.csproj" />
+      <ProjectReference Include="..\DataGridView.Services.Contracts\DataGridView.Services.Contracts.csproj" />
+      <ProjectReference Include="..\DataGridView.Services\DataGridView.Services.csproj" />
+      <ProjectReference Include="..\DataGridView.Storage.Contracts\DataGridView.Storage.Contracts.csproj" />
+      <ProjectReference Include="..\DataGridView.Storage.InMemory\DataGridView.Storage.InMemory.csproj" />
     </ItemGroup>
 
     <ItemGroup>

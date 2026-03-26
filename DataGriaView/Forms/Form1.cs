@@ -1,13 +1,17 @@
-namespace DataGridView
+using DataGridView.Models.Constants;
+using DataGridView.Models.Models;
+using DataGridView.Services.Contracts;
+
+namespace DataGriaView.Forms
 {
     public partial class Form1 : Form
     {
-        private readonly ProductService productService;
+        private readonly IProductService productService;
 
-        public Form1()
+        public Form1(IProductService productService)
         {
             InitializeComponent();
-            productService = new ProductService();
+            this.productService = productService;
             Text = AppConstants.FormTitle;
             dataGridView1.CellPainting += dataGridView1_CellPainting;
             InitializeDataGridView();
@@ -35,7 +39,6 @@ namespace DataGridView
             if (dataGridView1.SelectedRows.Count > 0 &&
                 dataGridView1.SelectedRows[0].DataBoundItem is Product product)
             {
-                // Передаём тот же объект (не клон!)
                 var form = new ProductEditForm(product, false);
 
                 if (form.ShowDialog() == DialogResult.OK)

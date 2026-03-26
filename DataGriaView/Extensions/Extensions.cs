@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 
-namespace DataGridView
+namespace DataGriaView.Extensions
 {
     public static class Extensions
     {

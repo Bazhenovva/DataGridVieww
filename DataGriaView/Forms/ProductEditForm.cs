@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
+using DataGridView.Models.Constants;
+using DataGridView.Models.Models;
 
-namespace DataGridView
+namespace DataGriaView.Forms
 {
     public partial class ProductEditForm : Form
     {
@@ -11,7 +13,7 @@ namespace DataGridView
         {
             InitializeComponent();
             product = productToEdit;
-            isNew = isNew;
+            this.isNew = isNew;
             Text = isNew ? AppConstants.FormAddTitle : AppConstants.FormEditTitle;
             InitializeControls();
             LoadProductData();
