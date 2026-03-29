@@ -59,5 +59,10 @@ namespace DataGridView.Models.Constants
         /// Заголовок формы добавления
         /// </summary>
         public const string FormAddTitle = "Добавление товара";
+
+        /// <summary>
+        /// Начальный ID для новых товаров
+        /// </summary>
+        public const int InitialId = 1;
     }
 }

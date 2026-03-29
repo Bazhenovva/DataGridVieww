@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using DataGridView.Models.Constants;
 using DataGridView.Models.Models;
 using DataGridView.Storage.Contracts;
 
@@ -18,7 +19,7 @@ namespace DataGridView.Storage.InMemory
         public InMemoryProductStorage()
         {
             products = new BindingList<Product>();
-            nextId = 1;
+            nextId = AppConstants.InitialId;
 
             products.Add(new Product("Гвоздь", ProductSize.Size10Mm, Material.Steel, 100, 20, 3.5m) { Id = nextId++ });
             products.Add(new Product("Гайка", ProductSize.M8, Material.Copper, 50, 10, 7.2m) { Id = nextId++ });
@@ -58,14 +59,6 @@ namespace DataGridView.Storage.InMemory
         public void Delete(Product product)
         {
             products.Remove(product);
-        }
-
-        /// <summary>
-        ///найти товар по ID
-        /// </summary>
-        public Product? GetById(int id)
-        {
-            return products.FirstOrDefault(p => p.Id == id);
         }
 
         /// <summary>

@@ -1,4 +1,4 @@
-﻿namespace DataGriaView.Forms
+﻿namespace DataGridView.UI.Forms
 {
     partial class Form1
     {

@@ -1,8 +1,8 @@
-using DataGriaView.Forms;
 using DataGridView.Services.Services;
 using DataGridView.Storage.InMemory;
+using DataGridView.UI.Forms;
 
-namespace DataGriaView
+namespace DataGridView.UI
 {
     internal static class Program
     {

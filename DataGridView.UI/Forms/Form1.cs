@@ -2,7 +2,7 @@ using DataGridView.Models.Constants;
 using DataGridView.Models.Models;
 using DataGridView.Services.Contracts;
 
-namespace DataGriaView.Forms
+namespace DataGridView.UI.Forms
 {
     public partial class Form1 : Form
     {

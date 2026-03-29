@@ -1,13 +1,14 @@
 using System.ComponentModel.DataAnnotations;
 using DataGridView.Models.Constants;
 using DataGridView.Models.Models;
+using DataGridView.UI.Extensions;
 
-namespace DataGriaView.Forms
+namespace DataGridView.UI.Forms
 {
     public partial class ProductEditForm : Form
     {
         private readonly Product product;
-        private readonly bool isNew;
+        private readonly bool isNew; // исправитб
 
         public ProductEditForm(Product productToEdit, bool isNew)
         {
@@ -15,6 +16,12 @@ namespace DataGriaView.Forms
             product = productToEdit;
             this.isNew = isNew;
             Text = isNew ? AppConstants.FormAddTitle : AppConstants.FormEditTitle;
+
+            textBoxName.AddBinding("Text", product, p => p.ProductName, errorProvider1);
+            numericUpDownQuantity.AddBinding("Value", product, p => p.Quantity, errorProvider1);
+            numericUpDownMinQuantity.AddBinding("Value", product, p => p.MinQuantity, errorProvider1);
+            numericUpDownPrice.AddBinding("Value", product, p => p.Price, errorProvider1);
+
             InitializeControls();
             LoadProductData();
         }
@@ -32,7 +39,7 @@ namespace DataGriaView.Forms
                 Material.Copper, Material.Steel, Material.Iron, Material.Chrome
             };
 
-            numericUpDownQuantity.Minimum = 0;
+            numericUpDownQuantity.Minimum = AppConstants.QuantityMin;
             numericUpDownQuantity.Maximum = AppConstants.QuantityMax;
 
             numericUpDownMinQuantity.Minimum = AppConstants.MinQuantityMin;
@@ -61,6 +68,17 @@ namespace DataGriaView.Forms
             product.Quantity = (int)numericUpDownQuantity.Value;
             product.MinQuantity = (int)numericUpDownMinQuantity.Value;
             product.Price = numericUpDownPrice.Value;
+
+            // Проверка цены
+            if (product.Price < AppConstants.PriceMin || product.Price > AppConstants.PriceMax)
+            {
+                MessageBox.Show(
+                    $"Цена должна быть от {AppConstants.PriceMin} до {AppConstants.PriceMax}",
+                    "Ошибка валидации",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
 
             var context = new ValidationContext(product);
             var results = new List<ValidationResult>();

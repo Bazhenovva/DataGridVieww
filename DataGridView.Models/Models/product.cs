@@ -31,9 +31,8 @@ namespace DataGridView.Models.Models
         public Material Material { get; set; }
 
         /// <summary>
-        /// Цена товара с валидацией по диапазону
+        /// Цена товара
         /// </summary>
-        [Range(typeof(decimal), "0.01", "999999", ErrorMessage = "Цена должна быть от 0.01 до 999999")]
         public decimal Price { get; set; }
 
         /// <summary>
@@ -43,14 +42,10 @@ namespace DataGridView.Models.Models
         public int MinQuantity { get; set; }
 
         /// <summary>
-        /// Количество товара на складе с валидацией и автоматическим ограничением
+        /// Количество товара на складе с валидацией по диапазону
         /// </summary>
         [Range(0, 100, ErrorMessage = "Количество должно быть от 0 до 100")]
-        public int Quantity
-        {
-            get;
-            set => field = Math.Clamp(value, AppConstants.QuantityMin, AppConstants.QuantityMax);
-        }
+        public int Quantity { get; set; }  // ← Убрал Math.Clamp
 
         /// <summary>
         /// Общая сумма товара (вычисляемое свойство)

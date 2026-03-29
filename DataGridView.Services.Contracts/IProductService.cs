@@ -27,10 +27,5 @@ namespace DataGridView.Services.Contracts
         /// удалить товар
         /// </summary>
         void Delete(Product product);
-
-        /// <summary>
-        /// найти товар по ID
-        /// </summary>
-        Product GetById(int id);
     }
 }

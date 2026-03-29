@@ -29,11 +29,6 @@ namespace DataGridView.Storage.Contracts
         void Delete(Product product);
 
         /// <summary>
-        /// найти товар по ID
-        /// </summary>
-        Product GetById(int id);
-
-        /// <summary>
         /// получить следующий доступный ID
         /// </summary>
         int GetNextId();

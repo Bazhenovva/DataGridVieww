@@ -63,12 +63,5 @@ namespace DataGridView.Services.Services
             storage.Delete(product);
         }
 
-        /// <summary>
-        /// Находит товар подентификатору.
-        /// </summary>
-        public Product? GetById(int id)  // ← Исправлено на nullable
-        {
-            return products.FirstOrDefault(p => p.Id == id);
-        }
     }
 }
