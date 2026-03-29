@@ -18,8 +18,8 @@ namespace DataGridView.Storage.InMemory
         /// </summary>
         public InMemoryProductStorage()
         {
-            products = new BindingList<Product>();
-            nextId = AppConstants.InitialId;
+            products = [];
+            nextId =  BusinessConstants.InitialId;
 
             products.Add(new Product("Гвоздь", ProductSize.Size10Mm, Material.Steel, 100, 20, 3.5m) { Id = nextId++ });
             products.Add(new Product("Гайка", ProductSize.M8, Material.Copper, 50, 10, 7.2m) { Id = nextId++ });

@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 
-namespace DataGridView.UI.Extensions
+namespace UI.Extensions
 {
     /// <summary>
     /// Методы расширения для DataBinding с валидацией
@@ -51,7 +51,7 @@ namespace DataGridView.UI.Extensions
         }
 
         /// <summary>
-        /// Извлекает имя свойства из lambda-выражения
+        /// Извлекает имя свойства из лямбда выражения
         /// </summary>
         private static string GetMemberName<T>(Expression<T> expression)
         {

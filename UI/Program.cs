@@ -1,10 +1,10 @@
 using DataGridView.Services.Services;
 using DataGridView.Storage.InMemory;
-using DataGridView.UI.Forms;
+using UI.Forms;
 
-namespace DataGridView.UI
+namespace UI
 {
-    internal static class Program
+    static internal class Program
     {
         [STAThread]
         static void Main()
@@ -14,7 +14,7 @@ namespace DataGridView.UI
             var storage = new InMemoryProductStorage();
             var productService = new ProductService(storage);
 
-            Application.Run(new Form1(productService));
+            Application.Run(new ProductsForm(productService));
         }
     }
 }

@@ -1,9 +1,9 @@
 namespace DataGridView.Models.Constants
 {
     /// <summary>
-    /// Константы приложения для валидации и UI
+    /// Константы для валидации данных
     /// </summary>
-    public static class AppConstants
+    public static class ValidationConstants
     {
         /// <summary>
         /// Минимальная длина названия товара
@@ -46,23 +46,13 @@ namespace DataGridView.Models.Constants
         public const decimal PriceMax = 999999m;
 
         /// <summary>
-        /// Заголовок главной формы
+        /// Минимальное значение цены в UI контроле
         /// </summary>
-        public const string FormTitle = "Реестр товаров";
+        public const int PriceUiMin = 0;
 
         /// <summary>
-        /// Заголовок формы редактирования
+        /// Количество знаков после запятой для цены
         /// </summary>
-        public const string FormEditTitle = "Редактирование товара";
-
-        /// <summary>
-        /// Заголовок формы добавления
-        /// </summary>
-        public const string FormAddTitle = "Добавление товара";
-
-        /// <summary>
-        /// Начальный ID для новых товаров
-        /// </summary>
-        public const int InitialId = 1;
+        public const int PriceDecimalPlaces = 2;
     }
 }

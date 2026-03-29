@@ -1,6 +1,6 @@
-﻿namespace DataGridView.UI.Forms
+﻿namespace UI.Forms
 {
-    partial class Form1
+    partial class ProductsForm
     {
         private System.ComponentModel.IContainer components = null;
 
@@ -108,6 +108,7 @@
             dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.Size = new System.Drawing.Size(1332, 756);
             dataGridView1.TabIndex = 2;
+            dataGridView1.CellPainting += dataGridView1_CellPainting;
 
             // ProductNameColumn
             ProductNameColumn.DataPropertyName = "ProductName";
@@ -171,7 +172,7 @@
             ClientSize = new System.Drawing.Size(1332, 791);
             Controls.Add(dataGridView1);
             Controls.Add(toolStrip1);
-            Name = "Form1";
+            Name = "ProductsForm";
             Text = "Реестр товаров";
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             toolStrip1.ResumeLayout(false);

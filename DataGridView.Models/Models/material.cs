@@ -8,22 +8,22 @@ namespace DataGridView.Models.Models
         /// <summary>
         /// Медь
         /// </summary>
-        public static readonly Material Copper = new("Медь");
+        public readonly static Material Copper = new("Медь");
 
         /// <summary>
         /// Сталь
         /// </summary>
-        public static readonly Material Steel = new("Сталь");
+        public readonly static Material Steel = new("Сталь");
 
         /// <summary>
         /// Железо
         /// </summary>
-        public static readonly Material Iron = new("Железо");
+        public readonly static Material Iron = new("Железо");
 
         /// <summary>
         /// Хром
         /// </summary>
-        public static readonly Material Chrome = new("Хром");
+        public readonly static Material Chrome = new("Хром");
 
         private readonly string name;
 

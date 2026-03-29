@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using DataGridView.Models.Constants;
 
 namespace DataGridView.Models.Models
@@ -14,21 +13,19 @@ namespace DataGridView.Models.Models
         public int Id { get; set; }
 
         /// <summary>
-        /// Название товара с валидацией по длине
+        /// Название товара
         /// </summary>
-        [Required(ErrorMessage = "Введите название товара")]
-        [StringLength(AppConstants.ProductNameMaxLength, MinimumLength = AppConstants.ProductNameMinLength, ErrorMessage = "Название должно быть от 3 до 100 символов")]
         public string ProductName { get; set; }
 
         /// <summary>
         /// Размер товара
         /// </summary>
-        public ProductSize ProductSize { get; set; }
+        public ProductSize? ProductSize { get; set; }
 
         /// <summary>
         /// Материал товара
         /// </summary>
-        public Material Material { get; set; }
+        public Material? Material { get; set; }
 
         /// <summary>
         /// Цена товара
@@ -36,16 +33,14 @@ namespace DataGridView.Models.Models
         public decimal Price { get; set; }
 
         /// <summary>
-        /// Минимальный запас товара с валидацией по диапазону
+        /// Минимальный запас товара
         /// </summary>
-        [Range(0, 1000, ErrorMessage = "Мин. запас должен быть от 0 до 1000")]
         public int MinQuantity { get; set; }
 
         /// <summary>
-        /// Количество товара на складе с валидацией по диапазону
+        /// Количество товара на складе
         /// </summary>
-        [Range(0, 100, ErrorMessage = "Количество должно быть от 0 до 100")]
-        public int Quantity { get; set; }  // ← Убрал Math.Clamp
+        public int Quantity { get; set; }
 
         /// <summary>
         /// Общая сумма товара (вычисляемое свойство)
@@ -53,10 +48,40 @@ namespace DataGridView.Models.Models
         public decimal TotalAmount => Quantity * Price;
 
         /// <summary>
-        /// Конструктор с параметрами для создания товара
+        /// Конструктор с параметрами и валидацией
         /// </summary>
-        public Product(string productName, ProductSize productSize, Material material, int quantity, int minQuantity, decimal price)
+        public Product(string productName, ProductSize? productSize, Material? material, int quantity, int minQuantity, decimal price)
         {
+            if (string.IsNullOrWhiteSpace(productName))
+            {
+                throw new ArgumentException("Введите название товара");
+            }
+
+            if (productName.Length < ValidationConstants.ProductNameMinLength ||
+                productName.Length > ValidationConstants.ProductNameMaxLength)
+            {
+                throw new ArgumentException(
+                    $"Название должно быть от {ValidationConstants.ProductNameMinLength} до {ValidationConstants.ProductNameMaxLength} символов");
+            }
+
+            if (price < ValidationConstants.PriceMin || price > ValidationConstants.PriceMax)
+            {
+                throw new ArgumentException(
+                    $"Цена должна быть от {ValidationConstants.PriceMin} до {ValidationConstants.PriceMax}");
+            }
+
+            if (quantity < ValidationConstants.QuantityMin || quantity > ValidationConstants.QuantityMax)
+            {
+                throw new ArgumentException(
+                    $"Количество должно быть от {ValidationConstants.QuantityMin} до {ValidationConstants.QuantityMax}");
+            }
+
+            if (minQuantity < ValidationConstants.MinQuantityMin || minQuantity > ValidationConstants.MinQuantityMax)
+            {
+                throw new ArgumentException(
+                    $"Мин. запас должен быть от {ValidationConstants.MinQuantityMin} до {ValidationConstants.MinQuantityMax}");
+            }
+
             ProductName = productName;
             ProductSize = productSize;
             Material = material;
@@ -66,9 +91,17 @@ namespace DataGridView.Models.Models
         }
 
         /// <summary>
-        /// Конструктор по умолчанию с начальными значениями
+        /// Конструктор по умолчанию (для создания нового товара)
         /// </summary>
-        public Product() : this("", ProductSize.M6, Material.Steel, 0, 0, 0m) { }
+        public Product()
+        {
+            ProductName = "";
+            ProductSize = ProductSize.M6;
+            Material = Material.Steel;
+            Quantity = 0;
+            MinQuantity = 0;
+            Price = 0m;
+        }
 
         /// <summary>
         /// Создание копии товара

@@ -2,27 +2,38 @@ using DataGridView.Models.Constants;
 using DataGridView.Models.Models;
 using DataGridView.Services.Contracts;
 
-namespace DataGridView.UI.Forms
+namespace UI.Forms
 {
-    public partial class Form1 : Form
+    /// <summary>
+    /// Главная форма приложения со списком товаров
+    /// </summary>
+    public partial class ProductsForm : Form
     {
         private readonly IProductService productService;
 
-        public Form1(IProductService productService)
+        /// <summary>
+        /// Инициализирует новую главную форму
+        /// </summary>
+        public ProductsForm(IProductService productService)
         {
             InitializeComponent();
             this.productService = productService;
-            Text = AppConstants.FormTitle;
-            dataGridView1.CellPainting += dataGridView1_CellPainting;
+            Text = UiConstants.FormTitle;
             InitializeDataGridView();
         }
 
+        /// <summary>
+        /// Инициализирует DataGridView с данными о товарах
+        /// </summary>
         private void InitializeDataGridView()
         {
             dataGridView1.AutoGenerateColumns = false;
             dataGridView1.DataSource = productService.GetAll();
         }
 
+        /// <summary>
+        /// Обработчик кнопки добавления нового товара
+        /// </summary>
         private void toolStripButtonAdd_Click(object sender, EventArgs e)
         {
             var newProduct = new Product();
@@ -34,6 +45,9 @@ namespace DataGridView.UI.Forms
             }
         }
 
+        /// <summary>
+        /// Обработчик кнопки редактирования выбранного товара
+        /// </summary>
         private void toolStripButtonEdit_Click(object sender, EventArgs e)
         {
             if (dataGridView1.SelectedRows.Count > 0 &&
@@ -48,11 +62,14 @@ namespace DataGridView.UI.Forms
             }
             else
             {
-                MessageBox.Show("Выберите товар для редактирования", "Внимание",
+                MessageBox.Show("Выберите товар для редактирования", UiConstants.MessageBoxWarningTitle,
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
+        /// <summary>
+        /// Обработчик кнопки удаления выбранного товара
+        /// </summary>
         private void toolStripButtonDelete_Click(object sender, EventArgs e)
         {
             if (dataGridView1.SelectedRows.Count > 0 &&
@@ -60,7 +77,7 @@ namespace DataGridView.UI.Forms
             {
                 var result = MessageBox.Show(
                     $"Удалить товар \"{product.ProductName}\"?",
-                    "Удаление товара",
+                    UiConstants.MessageBoxDeleteTitle,
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question);
 
@@ -71,44 +88,51 @@ namespace DataGridView.UI.Forms
             }
             else
             {
-                MessageBox.Show("Выберите товар для удаления", "Внимание",
+                MessageBox.Show("Выберите товар для удаления", UiConstants.MessageBoxWarningTitle,
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
-        private void dataGridView1_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        /// <summary>
+        /// Отрисовка столбца, индикатор заполнения
+        /// </summary>
+        private void dataGridView1_CellPainting(object? sender, DataGridViewCellPaintingEventArgs e)
         {
-            const int cellOffset = 2;
+            const int cellOffset = UiConstants.CellOffset;
 
             if (e.ColumnIndex >= 0 && e.RowIndex >= 0 &&
-                dataGridView1.Columns[e.ColumnIndex].Name == "QuantityColumn")
+                dataGridView1.Columns[e.ColumnIndex].Name == UiConstants.QuantityColumnName)
             {
                 if (dataGridView1.Rows[e.RowIndex].DataBoundItem is Product product)
                 {
                     e.Handled = true;
                     e.PaintBackground(e.ClipBounds, false);
 
-                    e.Graphics.DrawRectangle(Pens.SteelBlue, new Rectangle(
+                    using var borderPen = new Pen(UiConstants.QuantityProgressBarBorderColor);
+                    using var fillBrush = new SolidBrush(UiConstants.QuantityProgressBarFillColor);
+
+                    e.Graphics?.DrawRectangle(borderPen, new Rectangle(
                         e.CellBounds.X + cellOffset,
                         e.CellBounds.Y + cellOffset,
                         e.CellBounds.Width - cellOffset * 2 - 1,
                         e.CellBounds.Height - cellOffset * 2 - 1));
 
-                    int fillWidth = (int)(product.Quantity *
-                        (e.CellBounds.Width - cellOffset * 2 - 1) / AppConstants.QuantityMax);
+                    var fillWidth = (product.Quantity *
+                        (e.CellBounds.Width - cellOffset * 2 - 1) / ValidationConstants.QuantityMax);
 
-                    e.Graphics.FillRectangle(Brushes.SkyBlue, new Rectangle(
+                    e.Graphics?.FillRectangle(fillBrush, new Rectangle(
                         e.CellBounds.X + cellOffset,
                         e.CellBounds.Y + cellOffset,
                         fillWidth,
                         e.CellBounds.Height - cellOffset * 2 - 1));
 
-                    string text = product.Quantity.ToString();
-                    Font font = e.CellStyle.Font ?? dataGridView1.Font;
-                    TextFormatFlags flags = TextFormatFlags.HorizontalCenter |
-                                           TextFormatFlags.VerticalCenter;
-
-                    TextRenderer.DrawText(e.Graphics, text, font, e.CellBounds, Color.Black, flags);
+                    if (e.Graphics != null)
+                    {
+                        TextRenderer.DrawText(e.Graphics, product.Quantity.ToString(),
+                            e.CellStyle?.Font ?? dataGridView1.Font, e.CellBounds,
+                            UiConstants.QuantityProgressTextColor,
+                            TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+                    }
                 }
             }
         }
