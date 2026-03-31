@@ -1,6 +1,6 @@
 using System.ComponentModel;
+using DataGridView.Models;
 using DataGridView.Models.Constants;
-using DataGridView.Models.Models;
 using DataGridView.Storage.Contracts;
 
 namespace DataGridView.Storage.InMemory

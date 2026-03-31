@@ -1,6 +1,7 @@
+using System.ComponentModel.DataAnnotations;
 using DataGridView.Models.Constants;
 
-namespace DataGridView.Models.Models
+namespace DataGridView.Models
 {
     /// <summary>
     /// Модель товара для реестра
@@ -15,31 +16,39 @@ namespace DataGridView.Models.Models
         /// <summary>
         /// Название товара
         /// </summary>
+        [Required(ErrorMessage = "Название товара обязательно")]
+        [StringLength(100, MinimumLength = 2, ErrorMessage = "Название должно быть от 2 до 100 символов")]
         public string ProductName { get; set; }
 
         /// <summary>
         /// Размер товара
         /// </summary>
+        [Required(ErrorMessage = "Размер товара обязателен")]
         public ProductSize? ProductSize { get; set; }
 
         /// <summary>
         /// Материал товара
         /// </summary>
+        [Required(ErrorMessage = "Материал товара обязателен")]
         public Material? Material { get; set; }
 
         /// <summary>
         /// Цена товара
         /// </summary>
+        // ИСПРАВЛЕНО: используем double литералы вместо строк, чтобы избежать ошибки парсинга культуры
+        [Range(0.01, 1000000.0, ErrorMessage = "Цена должна быть больше 0 и не превышать 1 000 000")]
         public decimal Price { get; set; }
 
         /// <summary>
         /// Минимальный запас товара
         /// </summary>
+        [Range(0, int.MaxValue, ErrorMessage = "Мин. запас не может быть отрицательным")]
         public int MinQuantity { get; set; }
 
         /// <summary>
         /// Количество товара на складе
         /// </summary>
+        [Range(0, int.MaxValue, ErrorMessage = "Количество не может быть отрицательным")]
         public int Quantity { get; set; }
 
         /// <summary>
@@ -57,29 +66,24 @@ namespace DataGridView.Models.Models
                 throw new ArgumentException("Введите название товара");
             }
 
-            if (productName.Length < ValidationConstants.ProductNameMinLength ||
-                productName.Length > ValidationConstants.ProductNameMaxLength)
+            if (productName.Length < 2 || productName.Length > 100)
             {
-                throw new ArgumentException(
-                    $"Название должно быть от {ValidationConstants.ProductNameMinLength} до {ValidationConstants.ProductNameMaxLength} символов");
+                throw new ArgumentException("Название должно быть от 2 до 100 символов");
             }
 
-            if (price < ValidationConstants.PriceMin || price > ValidationConstants.PriceMax)
+            if (price < 0.01m || price > 1000000m)
             {
-                throw new ArgumentException(
-                    $"Цена должна быть от {ValidationConstants.PriceMin} до {ValidationConstants.PriceMax}");
+                throw new ArgumentException("Цена должна быть от 0.01 до 1 000 000");
             }
 
-            if (quantity < ValidationConstants.QuantityMin || quantity > ValidationConstants.QuantityMax)
+            if (quantity < 0 || quantity > int.MaxValue)
             {
-                throw new ArgumentException(
-                    $"Количество должно быть от {ValidationConstants.QuantityMin} до {ValidationConstants.QuantityMax}");
+                throw new ArgumentException("Количество должно быть неотрицательным");
             }
 
-            if (minQuantity < ValidationConstants.MinQuantityMin || minQuantity > ValidationConstants.MinQuantityMax)
+            if (minQuantity < 0 || minQuantity > int.MaxValue)
             {
-                throw new ArgumentException(
-                    $"Мин. запас должен быть от {ValidationConstants.MinQuantityMin} до {ValidationConstants.MinQuantityMax}");
+                throw new ArgumentException("Мин. запас должен быть неотрицательным");
             }
 
             ProductName = productName;
@@ -91,7 +95,7 @@ namespace DataGridView.Models.Models
         }
 
         /// <summary>
-        /// Конструктор по умолчанию (для создания нового товара)
+        /// Конструктор по умолчанию
         /// </summary>
         public Product()
         {

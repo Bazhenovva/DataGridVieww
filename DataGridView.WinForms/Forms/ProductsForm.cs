@@ -1,8 +1,8 @@
+using DataGridView.Models;
 using DataGridView.Models.Constants;
-using DataGridView.Models.Models;
 using DataGridView.Services.Contracts;
 
-namespace UI.Forms
+namespace DataGridView.WinForms.Forms
 {
     /// <summary>
     /// Главная форма приложения со списком товаров

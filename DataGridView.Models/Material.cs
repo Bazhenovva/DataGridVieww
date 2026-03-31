@@ -1,4 +1,4 @@
-namespace DataGridView.Models.Models
+namespace DataGridView.Models
 {
     /// <summary>
     /// Класс для представления материалов товара

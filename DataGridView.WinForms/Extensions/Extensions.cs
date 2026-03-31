@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 
-namespace UI.Extensions
+namespace DataGridView.WinForms.Extensions
 {
     /// <summary>
     /// Методы расширения для DataBinding с валидацией

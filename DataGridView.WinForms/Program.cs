@@ -1,13 +1,13 @@
 using DataGridView.Services.Services;
 using DataGridView.Storage.InMemory;
-using UI.Forms;
+using DataGridView.WinForms.Forms;
 
-namespace UI
+namespace DataGridView.WinForms
 {
     static internal class Program
     {
         [STAThread]
-        static void Main()
+        private static void Main()
         {
             ApplicationConfiguration.Initialize();
 

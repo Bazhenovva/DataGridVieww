@@ -1,8 +1,8 @@
+using DataGridView.Models;
 using DataGridView.Models.Constants;
-using DataGridView.Models.Models;
-using UI.Extensions;
+using DataGridView.WinForms.Extensions;
 
-namespace UI.Forms
+namespace DataGridView.WinForms.Forms
 {
     /// <summary>
     /// Форма добавления/редактирования товара
@@ -76,10 +76,22 @@ namespace UI.Forms
         {
             try
             {
+                if (comboBoxSize.SelectedItem is not ProductSize selectedSize)
+                {
+                    errorProvider1.SetError(comboBoxSize, "Выберите размер");
+                    return;
+                }
+
+                if (comboBoxMaterial.SelectedItem is not Material selectedMaterial)
+                {
+                    errorProvider1.SetError(comboBoxMaterial, "Выберите материал");
+                    return;
+                }
+
                 var validatedProduct = new Product(
                     textBoxName.Text.Trim(),
-                    (ProductSize)comboBoxSize.SelectedItem!,
-                    (Material)comboBoxMaterial.SelectedItem!,
+                    selectedSize,
+                    selectedMaterial,
                     (int)numericUpDownQuantity.Value,
                     (int)numericUpDownMinQuantity.Value,
                     numericUpDownPrice.Value

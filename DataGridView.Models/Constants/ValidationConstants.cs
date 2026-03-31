@@ -46,7 +46,7 @@ namespace DataGridView.Models.Constants
         public const decimal PriceMax = 999999m;
 
         /// <summary>
-        /// Минимальное значение цены в UI контроле
+        /// Минимальное значение цены в DataGridView.WinForms контроле
         /// </summary>
         public const int PriceUiMin = 0;
 

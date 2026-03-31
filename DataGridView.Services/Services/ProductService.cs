@@ -1,5 +1,5 @@
 using System.ComponentModel;
-using DataGridView.Models.Models;
+using DataGridView.Models;
 using DataGridView.Services.Contracts;
 using DataGridView.Storage.Contracts;
 
