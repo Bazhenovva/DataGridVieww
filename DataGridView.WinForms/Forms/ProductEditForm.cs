@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using DataGridView.Models;
 using DataGridView.Models.Constants;
 using DataGridView.WinForms.Extensions;
@@ -5,10 +6,16 @@ using DataGridView.WinForms.UI;
 
 namespace DataGridView.WinForms.Forms
 {
+    /// <summary>
+    /// Форма редактирования товара
+    /// </summary>
     public partial class ProductEditForm : Form
     {
         private readonly Product product;
 
+        /// <summary>
+        /// Инициализирует форму редактирования товара
+        /// </summary>
         public ProductEditForm(Product productToEdit, bool isNew)
         {
             InitializeComponent();
@@ -24,6 +31,9 @@ namespace DataGridView.WinForms.Forms
             LoadProductData();
         }
 
+        /// <summary>
+        /// Инициализирует контролы формы
+        /// </summary>
         private void InitializeControls()
         {
             comboBoxSize.DataSource = new[]
@@ -41,11 +51,14 @@ namespace DataGridView.WinForms.Forms
             numericUpDownQuantity.Maximum = ValidationConstants.QuantityMax;
             numericUpDownMinQuantity.Minimum = ValidationConstants.MinQuantityMin;
             numericUpDownMinQuantity.Maximum = ValidationConstants.MinQuantityMax;
-            numericUpDownPrice.Minimum = ValidationConstants.PriceMin;
+            numericUpDownPrice.Minimum = 0m;
             numericUpDownPrice.Maximum = ValidationConstants.PriceMax;
             numericUpDownPrice.DecimalPlaces = ValidationConstants.PriceDecimalPlaces;
         }
 
+        /// <summary>
+        /// Загружает данные товара в форму
+        /// </summary>
         private void LoadProductData()
         {
             textBoxName.Text = product.ProductName;
@@ -56,17 +69,28 @@ namespace DataGridView.WinForms.Forms
             numericUpDownPrice.Value = product.Price;
         }
 
+        /// <summary>
+        /// Обработчик кнопки сохранения товара
+        /// </summary>
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (!ValidateChildren())
+            errorProvider1.Clear();
+
+            if (comboBoxSize.SelectedItem is not ProductSize selectedSize)
             {
-                MessageBox.Show("Исправьте ошибки в полях перед сохранением.", "Ошибка валидации",
+                errorProvider1.SetError(comboBoxSize, "Выберите размер");
+                MessageBox.Show("Выберите размер товара", "Ошибка",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            var selectedSize = (ProductSize)comboBoxSize.SelectedItem;
-            var selectedMaterial = (Material)comboBoxMaterial.SelectedItem;
+            if (comboBoxMaterial.SelectedItem is not Material selectedMaterial)
+            {
+                errorProvider1.SetError(comboBoxMaterial, "Выберите материал");
+                MessageBox.Show("Выберите материал товара", "Ошибка",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             product.ProductName = textBoxName.Text.Trim();
             product.ProductSize = selectedSize;
@@ -75,11 +99,45 @@ namespace DataGridView.WinForms.Forms
             product.MinQuantity = (int)numericUpDownMinQuantity.Value;
             product.Price = numericUpDownPrice.Value;
 
+            var context = new ValidationContext(product);
+            var results = new List<ValidationResult>();
+
+            if (!Validator.TryValidateObject(product, context, results, validateAllProperties: true))
+            {
+                foreach (var error in results)
+                {
+                    foreach (var memberName in error.MemberNames)
+                    {
+                        switch (memberName)
+                        {
+                            case nameof(Product.ProductName):
+                                errorProvider1.SetError(textBoxName, error.ErrorMessage);
+                                break;
+                            case nameof(Product.Price):
+                                errorProvider1.SetError(numericUpDownPrice, error.ErrorMessage);
+                                break;
+                            case nameof(Product.Quantity):
+                                errorProvider1.SetError(numericUpDownQuantity, error.ErrorMessage);
+                                break;
+                            case nameof(Product.MinQuantity):
+                                errorProvider1.SetError(numericUpDownMinQuantity, error.ErrorMessage);
+                                break;
+                        }
+                    }
+                }
+
+                MessageBox.Show("Исправьте ошибки в полях перед сохранением.", "Ошибка валидации",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             DialogResult = DialogResult.OK;
             Close();
-
         }
 
+        /// <summary>
+        /// Обработчик кнопки отмены
+        /// </summary>
         private void btnCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;

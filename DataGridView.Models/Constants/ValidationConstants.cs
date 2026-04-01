@@ -33,7 +33,7 @@ namespace DataGridView.Models.Constants
         /// <summary>
         /// Максимальное значение минимального запаса
         /// </summary>
-        public const int MinQuantityMax = 1000;
+        public const int MinQuantityMax = 100;
 
         /// <summary>
         /// Минимальная цена товара
@@ -44,11 +44,6 @@ namespace DataGridView.Models.Constants
         /// Максимальная цена товара
         /// </summary>
         public const decimal PriceMax = 999999m;
-
-        /// <summary>
-        /// Минимальное значение цены в DataGridView.WinForms контроле
-        /// </summary>
-        public const int PriceUiMin = 0;
 
         /// <summary>
         /// Количество знаков после запятой для цены

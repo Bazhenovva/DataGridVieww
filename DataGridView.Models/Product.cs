@@ -17,7 +17,9 @@ namespace DataGridView.Models
         /// Название товара (от 3 до 100 символов)
         /// </summary>
         [Required(ErrorMessage = "Название товара обязательно")]
-        [StringLength(100, MinimumLength = 3, ErrorMessage = "Название должно быть от 3 до 100 символов")]
+        [StringLength(ValidationConstants.ProductNameMaxLength,
+                      MinimumLength = ValidationConstants.ProductNameMinLength,
+                      ErrorMessage = "Название должно быть от 3 до 100 символов")]
         public string ProductName { get; set; }
 
         /// <summary>
@@ -33,18 +35,25 @@ namespace DataGridView.Models
         /// <summary>
         /// Цена за единицу товара
         /// </summary>
-        [Range(0.01, 999999, ErrorMessage = "Цена должна быть больше 0 и не превышать 999 999")]
+        [Range((double)ValidationConstants.PriceMin,
+               (double)ValidationConstants.PriceMax,
+               ErrorMessage = "Цена должна быть больше 0 и не превышать 999 999")]
         public decimal Price { get; set; }
 
         /// <summary>
         /// Количество товара на складе
         /// </summary>
-        [Range(0, 100, ErrorMessage = "Количество должно быть от 0 до 100")]
+        [Range(ValidationConstants.QuantityMin,
+               ValidationConstants.QuantityMax,
+               ErrorMessage = "Количество должно быть от 0 до 100")]
         public int Quantity { get; set; }
 
         /// <summary>
-        /// Минимальный запас товара. Без range, ошибка не высветиться любое число больше 100 обрежеться до установленного максимума
+        /// Минимальный запас товара
         /// </summary>
+        [Range(ValidationConstants.MinQuantityMin,
+               ValidationConstants.MinQuantityMax,
+               ErrorMessage = "Мин. запас должен быть от 0 до 1000")]
         public int MinQuantity { get; set; }
 
         /// <summary>
@@ -55,32 +64,12 @@ namespace DataGridView.Models
         /// <summary>
         /// Создает товар с проверкой данных
         /// </summary>
-        public Product(string productName, ProductSize? productSize, Material? material, int quantity, int minQuantity, decimal price)
+        public Product(string productName, ProductSize? productSize, Material? material,
+                      int quantity, int minQuantity, decimal price)
         {
             if (string.IsNullOrWhiteSpace(productName))
             {
-                throw new ArgumentException("Введите название товара");
-            }
-
-            if (productName.Length < ValidationConstants.ProductNameMinLength ||
-                productName.Length > ValidationConstants.ProductNameMaxLength)
-            {
-                throw new ArgumentException($"Название должно быть от {ValidationConstants.ProductNameMinLength} до {ValidationConstants.ProductNameMaxLength} символов");
-            }
-
-            if (price < ValidationConstants.PriceMin || price > ValidationConstants.PriceMax)
-            {
-                throw new ArgumentException($"Цена должна быть от {ValidationConstants.PriceMin} до {ValidationConstants.PriceMax}");
-            }
-
-            if (quantity < ValidationConstants.QuantityMin || quantity > ValidationConstants.QuantityMax)
-            {
-                throw new ArgumentException($"Количество должно быть от {ValidationConstants.QuantityMin} до {ValidationConstants.QuantityMax}");
-            }
-
-            if (minQuantity < ValidationConstants.MinQuantityMin || minQuantity > ValidationConstants.MinQuantityMax)
-            {
-                throw new ArgumentException($"Мин. запас должен быть от {ValidationConstants.MinQuantityMin} до {ValidationConstants.MinQuantityMax}");
+                throw new ArgumentException("Введите название товара", nameof(productName));
             }
 
             ProductName = productName;
