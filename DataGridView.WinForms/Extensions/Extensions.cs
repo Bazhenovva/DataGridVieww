@@ -34,35 +34,48 @@ namespace DataGridView.WinForms.Extensions
             {
                 control.Validating += (_, e) =>
                 {
-                    var context = new ValidationContext(source);
+                    var property = source.GetType().GetProperty(sourcePropertyName);
+
+                    if (property == null)
+                    {
+                        return;
+                    }
+
+                    var value = property.GetValue(source);
+
+                    var context = new ValidationContext(source)
+                    {
+                        MemberName = sourcePropertyName
+                    };
+
                     var results = new List<ValidationResult>();
+
                     errorProvider.SetError(control, null);
 
-                    if (!Validator.TryValidateObject(source, context, results, validateAllProperties: true))
+                    if (!Validator.TryValidateProperty(value, context, results))
                     {
-                        foreach (var error in results.Where(x => x.MemberNames.Contains(sourcePropertyName)))
+                        foreach (var error in results)
                         {
                             errorProvider.SetError(control, error.ErrorMessage);
-                            e.Cancel = true;
                         }
+
+                        e.Cancel = true;
                     }
                 };
             }
         }
 
         /// <summary>
-        /// Извлекает имя свойства из лямбда выражения
+        /// Извлекает имя свойства из лямбда-выражения
         /// </summary>
-        private static string GetMemberName<T>(Expression<T> expression)
+        private static string GetMemberName<T>(Expression<Func<T, object>> expression)
         {
-            if (expression.Body is UnaryExpression unaryExpression)
+            if (expression.Body is UnaryExpression unary)
             {
-                var unExp = (MemberExpression)unaryExpression.Operand;
-                return unExp.Member.Name;
+                return ((MemberExpression)unary.Operand).Member.Name;
             }
 
-            var memExp = (MemberExpression)expression.Body;
-            return memExp.Member.Name;
+            return ((MemberExpression)expression.Body).Member.Name;
         }
     }
 }

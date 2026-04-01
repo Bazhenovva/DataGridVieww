@@ -1,6 +1,4 @@
-using System.Drawing;
-
-namespace DataGridView.Models.Constants
+namespace DataGridView.WinForms.UI
 {
     /// <summary>
     /// Константы для настройки пользовательского интерфейса

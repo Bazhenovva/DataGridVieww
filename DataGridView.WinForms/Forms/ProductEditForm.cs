@@ -1,19 +1,14 @@
 using DataGridView.Models;
 using DataGridView.Models.Constants;
 using DataGridView.WinForms.Extensions;
+using DataGridView.WinForms.UI;
 
 namespace DataGridView.WinForms.Forms
 {
-    /// <summary>
-    /// Форма добавления/редактирования товара
-    /// </summary>
     public partial class ProductEditForm : Form
     {
         private readonly Product product;
 
-        /// <summary>
-        /// Инициализирует новую форму редактирования товара
-        /// </summary>
         public ProductEditForm(Product productToEdit, bool isNew)
         {
             InitializeComponent();
@@ -29,36 +24,28 @@ namespace DataGridView.WinForms.Forms
             LoadProductData();
         }
 
-        /// <summary>
-        /// Инициализирует элементы управления формы
-        /// </summary>
-       private void InitializeControls()
-       {
-           comboBoxSize.DataSource = new[]
-           {
-               ProductSize.M6, ProductSize.M8, ProductSize.M10,
-               ProductSize.M12, ProductSize.Size10Mm, ProductSize.Size20Mm
-           };
+        private void InitializeControls()
+        {
+            comboBoxSize.DataSource = new[]
+            {
+                ProductSize.M6, ProductSize.M8, ProductSize.M10,
+                ProductSize.M12, ProductSize.Size10Mm, ProductSize.Size20Mm
+            };
 
-           comboBoxMaterial.DataSource = new[]
-           {
-               Material.Copper, Material.Steel, Material.Iron, Material.Chrome
-           };
+            comboBoxMaterial.DataSource = new[]
+            {
+                Material.Copper, Material.Steel, Material.Iron, Material.Chrome
+            };
 
-           numericUpDownQuantity.Minimum = ValidationConstants.QuantityMin;
-           numericUpDownQuantity.Maximum = ValidationConstants.QuantityMax;
+            numericUpDownQuantity.Minimum = ValidationConstants.QuantityMin;
+            numericUpDownQuantity.Maximum = ValidationConstants.QuantityMax;
+            numericUpDownMinQuantity.Minimum = ValidationConstants.MinQuantityMin;
+            numericUpDownMinQuantity.Maximum = ValidationConstants.MinQuantityMax;
+            numericUpDownPrice.Minimum = ValidationConstants.PriceMin;
+            numericUpDownPrice.Maximum = ValidationConstants.PriceMax;
+            numericUpDownPrice.DecimalPlaces = ValidationConstants.PriceDecimalPlaces;
+        }
 
-           numericUpDownMinQuantity.Minimum = ValidationConstants.MinQuantityMin;
-           numericUpDownMinQuantity.Maximum = ValidationConstants.MinQuantityMax;
-
-           numericUpDownPrice.Minimum = ValidationConstants.PriceUiMin;
-           numericUpDownPrice.Maximum = ValidationConstants.PriceMax;
-           numericUpDownPrice.DecimalPlaces = ValidationConstants.PriceDecimalPlaces;
-       }
-
-        /// <summary>
-        /// Загружает данные товара в элементы управления
-        /// </summary>
         private void LoadProductData()
         {
             textBoxName.Text = product.ProductName;
@@ -69,55 +56,30 @@ namespace DataGridView.WinForms.Forms
             numericUpDownPrice.Value = product.Price;
         }
 
-        /// <summary>
-        /// Обработчик кнопки сохранения товара
-        /// </summary>
         private void btnSave_Click(object sender, EventArgs e)
         {
-            try
+            if (!ValidateChildren())
             {
-                if (comboBoxSize.SelectedItem is not ProductSize selectedSize)
-                {
-                    errorProvider1.SetError(comboBoxSize, "Выберите размер");
-                    return;
-                }
-
-                if (comboBoxMaterial.SelectedItem is not Material selectedMaterial)
-                {
-                    errorProvider1.SetError(comboBoxMaterial, "Выберите материал");
-                    return;
-                }
-
-                var validatedProduct = new Product(
-                    textBoxName.Text.Trim(),
-                    selectedSize,
-                    selectedMaterial,
-                    (int)numericUpDownQuantity.Value,
-                    (int)numericUpDownMinQuantity.Value,
-                    numericUpDownPrice.Value
-                );
-
-                validatedProduct.Id = product.Id;
-                product.ProductName = validatedProduct.ProductName;
-                product.ProductSize = validatedProduct.ProductSize;
-                product.Material = validatedProduct.Material;
-                product.Quantity = validatedProduct.Quantity;
-                product.MinQuantity = validatedProduct.MinQuantity;
-                product.Price = validatedProduct.Price;
-
-                DialogResult = DialogResult.OK;
-                Close();
-            }
-            catch (ArgumentException ex)
-            {
-                MessageBox.Show(ex.Message, "Ошибка валидации",
+                MessageBox.Show("Исправьте ошибки в полях перед сохранением.", "Ошибка валидации",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
+
+            var selectedSize = (ProductSize)comboBoxSize.SelectedItem;
+            var selectedMaterial = (Material)comboBoxMaterial.SelectedItem;
+
+            product.ProductName = textBoxName.Text.Trim();
+            product.ProductSize = selectedSize;
+            product.Material = selectedMaterial;
+            product.Quantity = (int)numericUpDownQuantity.Value;
+            product.MinQuantity = (int)numericUpDownMinQuantity.Value;
+            product.Price = numericUpDownPrice.Value;
+
+            DialogResult = DialogResult.OK;
+            Close();
+
         }
 
-        /// <summary>
-        /// Обработчик кнопки отмены
-        /// </summary>
         private void btnCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
