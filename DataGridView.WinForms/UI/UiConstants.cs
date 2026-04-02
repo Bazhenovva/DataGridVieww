@@ -54,5 +54,10 @@ namespace DataGridView.WinForms.UI
         /// Заголовок диалога подтверждения удаления товара
         /// </summary>
         public const string MessageBoxDeleteTitle = "Удаление товара";
+
+        /// <summary>
+        /// Минимальное значение цены в интерфейсе (UI)
+        /// </summary>
+        public const decimal PriceUiMin = 0m;
     }
 }

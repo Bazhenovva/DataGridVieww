@@ -51,7 +51,7 @@ namespace DataGridView.WinForms.Forms
             numericUpDownQuantity.Maximum = ValidationConstants.QuantityMax;
             numericUpDownMinQuantity.Minimum = ValidationConstants.MinQuantityMin;
             numericUpDownMinQuantity.Maximum = ValidationConstants.MinQuantityMax;
-            numericUpDownPrice.Minimum = 0m;
+            numericUpDownPrice.Minimum = UiConstants.PriceUiMin;
             numericUpDownPrice.Maximum = ValidationConstants.PriceMax;
             numericUpDownPrice.DecimalPlaces = ValidationConstants.PriceDecimalPlaces;
         }
