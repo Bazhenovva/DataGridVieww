@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataGridView.Services.Contracts\DataGridView.Services.Contracts.csproj" />
-    <ProjectReference Include="..\DataGridView.Services.Tests\DataGridView.Services.Tests.csproj" />
     <ProjectReference Include="..\DataGridView.Storage.Contracts\DataGridView.Storage.Contracts.csproj" />
   </ItemGroup>
 
