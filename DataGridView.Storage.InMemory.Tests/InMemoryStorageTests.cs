@@ -4,9 +4,9 @@ using Xunit;
 
 namespace DataGridView.Storage.InMemory.Tests
 {
-     /// <summary>
-     /// Класс тестов для InMemoryProductStorage
-     /// </summary>
+    /// <summary>
+    /// Класс тестов для InMemoryProductStorage
+    /// </summary>
     public class InMemoryStorageTests
     {
         /// <summary>
@@ -45,23 +45,23 @@ namespace DataGridView.Storage.InMemory.Tests
         [Fact]
         public void AddShouldAddProductToCollection()
         {
-             // Arrange
-             var storage = new InMemoryProductStorage();
-             var newProduct = new Product
-             {
-                 ProductName = "гвозди",
-                 ProductSize = ProductSize.M6,
-                 Material = Material.Steel,
-                 Price = 23,
-                 Quantity = 34,
-                 MinQuantity = 1
-                };
+            // Arrange
+            var storage = new InMemoryProductStorage();
+            var newProduct = new Product
+            {
+                ProductName = "гвозди",
+                ProductSize = ProductSize.M6,
+                Material = Material.Steel,
+                Price = 23,
+                Quantity = 34,
+                MinQuantity = 1
+            };
 
-             // Act
-             storage.Add(newProduct);
+            // Act
+            storage.Add(newProduct);
 
-             // Assert
-             storage.GetAll().Should().Contain(newProduct);
+            // Assert
+            storage.GetAll().Should().Contain(newProduct);
 
         }
 

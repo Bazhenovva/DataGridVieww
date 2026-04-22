@@ -13,9 +13,9 @@ namespace DataGridView.Services.Tests
     /// </summary>
     public class ProductServiceTests
     {
-         /// <summary>
-         /// Тест проверяет что метод Add устанавливает товару идентификатор
-         /// </summary>
+        /// <summary>
+        /// Тест проверяет что метод Add устанавливает товару идентификатор
+        /// </summary>
         [Fact]
         public void AddNewProductShouldGenerateIdAndAddToCollection()
         {
@@ -46,9 +46,9 @@ namespace DataGridView.Services.Tests
             mockStorage.Verify(s => s.GetNextId(), Times.Once);
         }
 
-         /// <summary>
-         /// Тест проверяет что метод GetAll возвращает коллекцию из хранилища
-         /// </summary>
+        /// <summary>
+        /// Тест проверяет что метод GetAll возвращает коллекцию из хранилища
+        /// </summary>
         [Fact]
         public void GetAllShouldReturnProductsFromStorage()
         {
@@ -56,7 +56,7 @@ namespace DataGridView.Services.Tests
             var mock = new Mock<IProductStorage>();
             var initialProducts = new BindingList<Product>();
 
-            mock.Setup(x=>x.GetAll()).Returns(initialProducts);
+            mock.Setup(x => x.GetAll()).Returns(initialProducts);
 
             var service = new ProductService(mock.Object);
 
@@ -64,7 +64,7 @@ namespace DataGridView.Services.Tests
             var result = service.GetAll();
 
             //Assert
-            mock.Verify(x=>x.GetAll(),Times.Once);
+            mock.Verify(x => x.GetAll(), Times.Once);
             result.Should().BeSameAs(initialProducts);
         }
 
@@ -90,7 +90,7 @@ namespace DataGridView.Services.Tests
 
             initialProducts.Add(existingProduct);
 
-            mockStorage.Setup(x=>x.GetAll()).Returns(initialProducts);
+            mockStorage.Setup(x => x.GetAll()).Returns(initialProducts);
 
             var service = new ProductService(mockStorage.Object);
             var updatedProduct = new Product
@@ -196,7 +196,7 @@ namespace DataGridView.Services.Tests
 
             initialProducts.Add(existingProduct);
 
-            mockStorage.Setup(x=>x.GetAll()).Returns(initialProducts);
+            mockStorage.Setup(x => x.GetAll()).Returns(initialProducts);
 
             var service = new ProductService(mockStorage.Object);
             var productDelete = existingProduct;
@@ -211,7 +211,8 @@ namespace DataGridView.Services.Tests
         /// <summary>
         /// Тест проверяет что конструктор вызывает метод GetAll у хранилища и сохраняет коллекцию
         /// </summary>
-        [Fact] public void ConstructorShouldCallGetAllAndStoreCollection()
+        [Fact]
+        public void ConstructorShouldCallGetAllAndStoreCollection()
         {
             // Arrange
             var mockStorage = new Mock<IProductStorage>();
