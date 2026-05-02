@@ -34,6 +34,9 @@
 
     <ItemGroup>
       <PackageReference Include="DataGridView.Models" Version="1.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.3" />
+      <PackageReference Include="Serilog.Extensions.Logging" Version="10.0.0" />
+      <PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" />
     </ItemGroup>
 
 </Project>
