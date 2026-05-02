@@ -1,6 +1,9 @@
 using DataGridView.Services.Services;
 using DataGridView.Storage.InMemory;
 using DataGridView.WinForms.Forms;
+using Serilog.Extensions.Logging;
+using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace DataGridView.WinForms
 {
@@ -9,12 +12,24 @@ namespace DataGridView.WinForms
         [STAThread]
         private static void Main()
         {
+            var logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Debug()
+                .WriteTo.Console()
+                .WriteTo.File("logs/product-.log", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
+            var microsoftLogger = new SerilogLoggerFactory(logger)
+                .CreateLogger<ProductLoggerService>();
+
             ApplicationConfiguration.Initialize();
 
             var storage = new InMemoryProductStorage();
             var productService = new ProductService(storage);
 
-            Application.Run(new ProductsForm(productService));
+            var productLoggerService = new ProductLoggerService(productService, microsoftLogger);
+
+            Application.Run(new ProductsForm(productLoggerService));
         }
     }
 }

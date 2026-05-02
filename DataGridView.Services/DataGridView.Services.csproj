@@ -12,4 +12,8 @@
     <ProjectReference Include="..\DataGridView.Storage.Contracts\DataGridView.Storage.Contracts.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.3" />
+  </ItemGroup>
+
 </Project>
