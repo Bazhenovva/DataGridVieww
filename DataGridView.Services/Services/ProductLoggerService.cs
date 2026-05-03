@@ -8,7 +8,6 @@ namespace DataGridView.Services.Services
 {
     /// <summary>
     /// Декоратор для логирования производительности методов ProductService
-    /// Использует ILogger из Microsoft.Extensions.Logging
     /// </summary>
     public class ProductLoggerService : IProductService
     {
@@ -21,6 +20,9 @@ namespace DataGridView.Services.Services
             this.logger = logger;
         }
 
+        /// <summary>
+        /// Возврат всех товаров с логированием времени выполнения
+        /// </summary>
         public BindingList<Product> GetAll()
         {
             var stopwatch = Stopwatch.StartNew();
@@ -39,6 +41,9 @@ namespace DataGridView.Services.Services
             }
         }
 
+        /// <summary>
+        /// Добавление нового товара с логированием времени выполнения
+        /// </summary>
         public void Add(Product product)
         {
             var stopwatch = Stopwatch.StartNew();
@@ -58,6 +63,9 @@ namespace DataGridView.Services.Services
             }
         }
 
+        /// <summary>
+        /// Обновление существующий товар с логированием времени выполнения
+        /// </summary>
         public void Update(Product product)
         {
             var stopwatch = Stopwatch.StartNew();
@@ -77,6 +85,9 @@ namespace DataGridView.Services.Services
             }
         }
 
+        /// <summary>
+        /// Удаление товара с логированием времени выполнения
+        /// </summary>
         public void Delete(Product product)
         {
             var stopwatch = Stopwatch.StartNew();
