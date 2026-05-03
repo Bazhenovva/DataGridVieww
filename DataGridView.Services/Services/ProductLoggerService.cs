@@ -14,6 +14,9 @@ namespace DataGridView.Services.Services
         private readonly IProductService mainService;
         private readonly ILogger<ProductLoggerService> logger;
 
+        /// <summary>
+        /// Инициализация нового экземпляра с основным сервисом и логгером
+        /// </summary>
         public ProductLoggerService(IProductService mainService, ILogger<ProductLoggerService> logger)
         {
             this.mainService = mainService;
