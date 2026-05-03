@@ -7,16 +7,20 @@ using Serilog;
 
 namespace DataGridView.WinForms
 {
+    /// <summary>
+    /// Точка входа в приложение
+    /// </summary>
     static internal class Program
     {
+        /// <summary>
+        /// Главный метод приложения
+        /// </summary>
         [STAThread]
         private static void Main()
         {
             var logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .WriteTo.Debug()
-                .WriteTo.Console()
-                .WriteTo.File("logs/product-.log", rollingInterval: RollingInterval.Day)
                 .WriteTo.Seq(
                 "http://localhost:5341",
                 apiKey: "DeKeedfm9oE5YTPf4XVg",
