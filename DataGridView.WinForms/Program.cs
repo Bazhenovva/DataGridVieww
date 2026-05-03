@@ -17,6 +17,11 @@ namespace DataGridView.WinForms
                 .WriteTo.Debug()
                 .WriteTo.Console()
                 .WriteTo.File("logs/product-.log", rollingInterval: RollingInterval.Day)
+                .WriteTo.Seq(
+                "http://localhost:5341",
+                apiKey: "DeKeedfm9oE5YTPf4XVg",
+                restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information
+                )
                 .CreateLogger();
 
             var microsoftLogger = new SerilogLoggerFactory(logger)
