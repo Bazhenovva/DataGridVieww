@@ -26,6 +26,7 @@ namespace DataGridView.WinForms
                 apiKey: "DeKeedfm9oE5YTPf4XVg",
                 restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information
                 )
+                .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
 
             var microsoftLogger = new SerilogLoggerFactory(logger)
