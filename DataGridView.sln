@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataGridView.Services.Tests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataGridView.Storage.InMemory.Tests", "DataGridView.Storage.InMemory.Tests\DataGridView.Storage.InMemory.Tests.csproj", "{9C1F2ACB-76DA-4CFD-834F-A352D9F2DAC3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataGridView.Storage.MsSql", "DataGridView.Storage.MsSql\DataGridView.Storage.MsSql.csproj", "{A584DA47-22B3-4373-84A8-2D0B6A07088C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{9C1F2ACB-76DA-4CFD-834F-A352D9F2DAC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C1F2ACB-76DA-4CFD-834F-A352D9F2DAC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C1F2ACB-76DA-4CFD-834F-A352D9F2DAC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A584DA47-22B3-4373-84A8-2D0B6A07088C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A584DA47-22B3-4373-84A8-2D0B6A07088C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A584DA47-22B3-4373-84A8-2D0B6A07088C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A584DA47-22B3-4373-84A8-2D0B6A07088C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,6 +78,7 @@ Global
 		{454AF1FA-C1B7-4CA5-ADEC-2E5CB12DB02D} = {0FDEB101-5B7A-48DD-AB64-B69EAF667079}
 		{F32ED0E1-0713-43ED-806D-8282634C27CF} = {9BA2C18A-A6B2-4DA0-8FFA-110E997613D3}
 		{9C1F2ACB-76DA-4CFD-834F-A352D9F2DAC3} = {0FDEB101-5B7A-48DD-AB64-B69EAF667079}
+		{A584DA47-22B3-4373-84A8-2D0B6A07088C} = {0FDEB101-5B7A-48DD-AB64-B69EAF667079}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C3F1B925-0124-4DA8-B266-7AD1908E1499}

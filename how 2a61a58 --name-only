@@ -1,0 +1,77 @@
+[33m73e751f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mРабота-с-базой-данных-через-ORM-EF-Core[m[33m, [m[1;31morigin/Работа-с-базой-данных-через-ORM-EF-Core[m[33m, [m[1;32mmain[m[33m)[m HEAD@{0}: checkout: moving from логирование-производительности-и-сбор-логов to Работа-с-базой-данных-через-ORM-EF-Core
+[33m7e24bbc[m[33m ([m[1;31morigin/логирование-производительности-и-сбор-логов[m[33m, [m[1;32mлогирование-производительности-и-сбор-логов[m[33m)[m HEAD@{1}: commit: запись логов в файл
+[33m8087212[m HEAD@{2}: commit: документация + доработка кода
+[33me34f7d5[m HEAD@{3}: commit: отправка логов в seq
+[33me17e469[m HEAD@{4}: commit: саммари
+[33m6dc205f[m HEAD@{5}: commit: добавила саммари
+[33m2eb91fa[m HEAD@{6}: commit: логирование производительности через декоратор
+[33m18a1cae[m HEAD@{7}: commit: создание класса и добаление библиотек
+[33mb410d66[m HEAD@{8}: checkout: moving from написание-unit-тестов to логирование-производительности-и-сбор-логов
+[33mb410d66[m HEAD@{9}: checkout: moving from написание-unit-тестов to написание-unit-тестов
+[33mb410d66[m HEAD@{10}: branch: Reset to origin/написание-unit-тестов
+[33m388d526[m HEAD@{11}: commit: создание unit тестов
+[33m364433e[m HEAD@{12}: commit: добавление второго класса библиотеки в DAL
+[33m1c92d6e[m HEAD@{13}: commit: добавление класса библиотеки в BL
+[33m1f821ff[m HEAD@{14}: checkout: moving from feature to написание-unit-тестов
+[33m2a61a58[m HEAD@{15}: checkout: moving from написание-unit-тестов to feature
+[33m1f821ff[m HEAD@{16}: checkout: moving from создание-nuget-пакета to написание-unit-тестов
+[33m1f821ff[m HEAD@{17}: checkout: moving from feature to создание-nuget-пакета
+[33m2a61a58[m HEAD@{18}: checkout: moving from main to feature
+[33m73e751f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mРабота-с-базой-данных-через-ORM-EF-Core[m[33m, [m[1;31morigin/Работа-с-базой-данных-через-ORM-EF-Core[m[33m, [m[1;32mmain[m[33m)[m HEAD@{19}: checkout: moving from создание-nuget-пакета to main
+[33m1f821ff[m HEAD@{20}: checkout: moving from написание-unit-тестов to создание-nuget-пакета
+[33m1f821ff[m HEAD@{21}: checkout: moving from создание-nuget-пакета to написание-unit-тестов
+[33m1f821ff[m HEAD@{22}: checkout: moving from написание-unit-тестов to создание-nuget-пакета
+[33m1f821ff[m HEAD@{23}: checkout: moving from создание-nuget-пакета to написание-unit-тестов
+[33m1f821ff[m HEAD@{24}: commit: добавила icon
+[33m4a96d43[m HEAD@{25}: commit: заменила прямую ссылку на проект DataGridView.Models на NuGet-пакет
+[33m2a61a58[m HEAD@{26}: checkout: moving from feature to создание-nuget-пакета
+[33m2a61a58[m HEAD@{27}: commit: исправление ошибок
+[33mc6aa186[m HEAD@{28}: commit: исправление ошибок
+[33m2f61ff2[m HEAD@{29}: commit: исправление ошибок
+[33m0c2859c[m HEAD@{30}: merge origin/feature: Merge made by the 'ort' strategy.
+[33mf7d73f3[m HEAD@{31}: rebase (finish): returning to refs/heads/feature
+[33mf7d73f3[m HEAD@{32}: rebase (fixup): public static readonly правильный порядок
+[33me2231da[m HEAD@{33}: rebase (fixup):  This is a combination of 6 commits.
+[33mbeebeb0[m HEAD@{34}: rebase (fixup):  This is a combination of 5 commits.
+[33me6fd180[m HEAD@{35}: rebase (fixup):  This is a combination of 4 commits.
+[33mc293fa8[m HEAD@{36}: rebase (fixup):  This is a combination of 3 commits.
+[33me334ee4[m HEAD@{37}: rebase (fixup):  This is a combination of 2 commits.
+[33md814c99[m HEAD@{38}: rebase (reword): public static readonly правильный порядок
+[33mccebce0[m HEAD@{39}: rebase: fast-forward
+[33mf7b09ff[m HEAD@{40}: rebase (start): checkout f7b09ff42950460b59af0a4ebe722e05838ed68f
+[33m2998108[m HEAD@{41}: commit: public static readonly праивльный порядок
+[33m5b38c97[m HEAD@{42}: commit: UseWindowsForms вместо UseWPF
+[33m8f57f41[m HEAD@{43}: commit: валидация с range и т д
+[33mf98f893[m HEAD@{44}: commit: сделала проверку
+[33m9fff7f2[m HEAD@{45}: commit: переименовала файлы
+[33m7879116[m HEAD@{46}: commit: исправление ошибок
+[33mccebce0[m HEAD@{47}: commit: исправление ошибок
+[33mf7b09ff[m HEAD@{48}: commit: настройка валидации, разделение констант,доработка кода
+[33m0ff8ac1[m HEAD@{49}: rebase (finish): returning to refs/heads/feature
+[33m0ff8ac1[m HEAD@{50}: rebase (fixup): доработка кода
+[33m246ca54[m HEAD@{51}: rebase (fixup):  This is a combination of 3 commits.
+[33m280ac42[m HEAD@{52}: rebase (fixup):  This is a combination of 2 commits.
+[33m31163bd[m HEAD@{53}: rebase (reword): доработка кода
+[33mb404bba[m HEAD@{54}: rebase: fast-forward
+[33m6ffa4b8[m HEAD@{55}: rebase (start): checkout 6ffa4b8683fabd9c89fcff3eaf14598fd68bedf3
+[33mbb38ee0[m HEAD@{56}: commit: доработка
+[33m29992be[m HEAD@{57}: rebase (abort): returning to refs/heads/feature
+[33m29992be[m HEAD@{58}: rebase (abort): returning to refs/heads/feature
+[33m29992be[m HEAD@{59}: commit: доработка кода
+[33m22e3e93[m HEAD@{60}: commit: изменения
+[33mb404bba[m HEAD@{61}: commit: реадктирование кода
+[33m6ffa4b8[m HEAD@{62}: commit: добавление части документации
+[33m1c2d4b6[m HEAD@{63}: rebase (finish): returning to refs/heads/feature
+[33m1c2d4b6[m HEAD@{64}: rebase (fixup): удаление лишних файлов
+[33mdebee8a[m HEAD@{65}: rebase (reword): удаление лишних файлов
+[33m2adc469[m HEAD@{66}: rebase: fast-forward
+[33m3f65d61[m HEAD@{67}: rebase (start): checkout 3f65d6113e193e96fd776e81ac7b82948bbbb59e
+[33mbe4d809[m HEAD@{68}: commit: удаление лишних файлов
+[33m2adc469[m HEAD@{69}: commit: удаление лишних файлов
+[33m3f65d61[m HEAD@{70}: commit: разделение по библиотекам
+[33md7cf9bd[m HEAD@{71}: reset: moving to d7cf9bd4466588de2797e4e1fbc746b4bd3a8f7b
+[33md7cf9bd[m HEAD@{72}: commit: примерная структура проекта
+[33m507e2c5[m HEAD@{73}: commit: реализация индикатора заполнения
+[33m2618d99[m HEAD@{74}: commit: Add first changes to feature branch
+[33m73e751f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mРабота-с-базой-данных-через-ORM-EF-Core[m[33m, [m[1;31morigin/Работа-с-базой-данных-через-ORM-EF-Core[m[33m, [m[1;32mmain[m[33m)[m HEAD@{75}: checkout: moving from main to feature
+[33m73e751f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mРабота-с-базой-данных-через-ORM-EF-Core[m[33m, [m[1;31morigin/Работа-с-базой-данных-через-ORM-EF-Core[m[33m, [m[1;32mmain[m[33m)[m HEAD@{76}: commit (initial): Initial commit

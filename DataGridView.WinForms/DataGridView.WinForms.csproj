@@ -21,6 +21,7 @@
       <ProjectReference Include="..\DataGridView.Services\DataGridView.Services.csproj" />
       <ProjectReference Include="..\DataGridView.Storage.Contracts\DataGridView.Storage.Contracts.csproj" />
       <ProjectReference Include="..\DataGridView.Storage.InMemory\DataGridView.Storage.InMemory.csproj" />
+      <ProjectReference Include="..\DataGridView.Storage.MsSql\DataGridView.Storage.MsSql.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -34,7 +35,7 @@
 
     <ItemGroup>
       <PackageReference Include="DataGridView.Models" Version="1.0.0" />
-      <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.3" />
+      <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.7" />
       <PackageReference Include="Serilog.Extensions.Logging" Version="10.0.0" />
       <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
       <PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" />
