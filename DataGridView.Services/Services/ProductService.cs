@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Linq;
 using DataGridView.Models;
 using DataGridView.Services.Contracts;
 using DataGridView.Storage.Contracts;
@@ -11,7 +12,7 @@ namespace DataGridView.Services.Services
     public class ProductService : IProductService
     {
         private readonly IProductStorage storage;
-        private readonly BindingList<Product> products;
+        private BindingList<Product> products;
 
         /// <summary>
         /// Инициализирует новый экземпляр сервиса
@@ -19,49 +20,56 @@ namespace DataGridView.Services.Services
         public ProductService(IProductStorage storage)
         {
             this.storage = storage;
-            products = storage.GetAll();
         }
 
         /// <summary>
-        /// Возвращает список всех товаров
+        /// Асинхронно возвращает список всех товаров
         /// </summary>
-        public BindingList<Product> GetAll() => products;
-
-        /// <summary>
-        /// Добавляет новый товар в реестр
-        /// </summary>
-        public void Add(Product product)
+        public async Task<BindingList<Product>> GetAllAsync()
         {
-            product.Id = storage.GetNextId();
-            storage.Add(product);
+            var list = await storage.GetAllAsync();
+            products = new BindingList<Product>(list);
+            return products;
         }
 
         /// <summary>
-        /// Обновляет существующий товар
+        /// Асинхронно добавляет новый товар в реестр
         /// </summary>
-        public void Update(Product product)
+        public async Task AddAsync(Product product)
         {
-            storage.Update(product);
-            var existing = products.FirstOrDefault(p => p.Id == product.Id);
-            if (existing != null)
+            await storage.AddAsync(product);
+            products?.Add(product);
+        }
+
+        /// <summary>
+        /// Асинхронно обновляет существующий товар
+        /// </summary>
+        public async Task UpdateAsync(Product product)
+        {
+            await storage.UpdateAsync(product);
+            if (products != null)
             {
-                existing.ProductName = product.ProductName;
-                existing.ProductSize = product.ProductSize;
-                existing.Material = product.Material;
-                existing.Price = product.Price;
-                existing.MinQuantity = product.MinQuantity;
-                existing.Quantity = product.Quantity;
-                products.ResetItem(products.IndexOf(existing));
+                var existing = products.FirstOrDefault(p => p.Id == product.Id);
+                if (existing != null)
+                {
+                    existing.ProductName = product.ProductName;
+                    existing.ProductSize = product.ProductSize;
+                    existing.Material = product.Material;
+                    existing.Price = product.Price;
+                    existing.MinQuantity = product.MinQuantity;
+                    existing.Quantity = product.Quantity;
+                    products.ResetItem(products.IndexOf(existing));
+                }
             }
         }
 
         /// <summary>
-        /// Удаляет товар из реестра
+        /// Асинхронно удаляет товар из реестра
         /// </summary>
-        public void Delete(Product product)
+        public async Task DeleteAsync(Product product)
         {
-            storage.Delete(product);
+            await storage.DeleteAsync(product);
+            products?.Remove(product);
         }
-
     }
 }

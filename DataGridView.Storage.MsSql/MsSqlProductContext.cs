@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using DataGridView.Models;
 
 namespace DataGridView.Storage.MsSql;
@@ -9,8 +9,7 @@ namespace DataGridView.Storage.MsSql;
 public class MsSqlProductContext : DbContext
 {
     /// <summary>
-    /// Набор данных товаров
-    /// <see cref="Product"/>).
+    /// Набор данных товаров (<see cref="Product"/>).
     /// </summary>
     public DbSet<Product> Products { get; set; }
 
@@ -27,12 +26,13 @@ public class MsSqlProductContext : DbContext
         if (!optionsBuilder.IsConfigured)
         {
             optionsBuilder.UseSqlServer(
-                @"Server=(localdb)\mssqllocaldb;Database=DataGridViewDb_v5;Trusted_Connection=True;");
+                @"Server=(localdb)\MSSQLLocalDB;Database=DataGridViewDb_v5;Trusted_Connection=True;");
         }
     }
+
     /// <summary>
     /// Преобразует <see cref="Material"/> и <see cref="ProductSize"/> в строку БД,
-    /// так как эти модели имеют приватные поля и не могут быть сохранены напрямую
+    /// так как эти модели имеют приватные поля и не могут быть сохранены напрямую.
     /// </summary>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -68,6 +68,7 @@ public class MsSqlProductContext : DbContext
             _ => Material.Steel
         };
     }
+
     /// <summary>
     /// Восстанавливает экземпляр <see cref="ProductSize"/> из строки БД.
     /// </summary>

@@ -24,41 +24,46 @@ namespace DataGridView.WinForms.Forms
         }
 
         /// <summary>
-        /// Инициализирует DataGridView с данными о товарах
+        /// Асинхронно инициализирует DataGridView с данными о товарах
         /// </summary>
-        private void InitializeDataGridView()
+        private async void InitializeDataGridView()
         {
             dataGridView1.AutoGenerateColumns = false;
-            dataGridView1.DataSource = productService.GetAll();
+            var data = await productService.GetAllAsync();
+            dataGridView1.DataSource = data;
         }
 
         /// <summary>
         /// Обработчик кнопки добавления нового товара
         /// </summary>
-        private void toolStripButtonAdd_Click(object sender, EventArgs e)
+        private async void toolStripButtonAdd_Click(object sender, EventArgs e)
         {
             var newProduct = new Product();
             var form = new ProductEditForm(newProduct, true);
 
             if (form.ShowDialog() == DialogResult.OK)
             {
-                productService.Add(newProduct);
+                await productService.AddAsync(newProduct);
+                await ReloadGridAsync();
             }
         }
 
         /// <summary>
         /// Обработчик кнопки редактирования выбранного товара
         /// </summary>
-        private void toolStripButtonEdit_Click(object sender, EventArgs e)
+        private async void toolStripButtonEdit_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.SelectedRows.Count > 0 &&
-                dataGridView1.SelectedRows[0].DataBoundItem is Product product)
+            if (dataGridView1.SelectedRows.Count > 0)
             {
-                var form = new ProductEditForm(product, false);
-
-                if (form.ShowDialog() == DialogResult.OK)
+                if (dataGridView1.SelectedRows[0].DataBoundItem is Product product)
                 {
-                    productService.Update(product);
+                    var form = new ProductEditForm(product, false);
+
+                    if (form.ShowDialog() == DialogResult.OK)
+                    {
+                        await productService.UpdateAsync(product);
+                        await ReloadGridAsync();
+                    }
                 }
             }
             else
@@ -71,20 +76,23 @@ namespace DataGridView.WinForms.Forms
         /// <summary>
         /// Обработчик кнопки удаления выбранного товара
         /// </summary>
-        private void toolStripButtonDelete_Click(object sender, EventArgs e)
+        private async void toolStripButtonDelete_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.SelectedRows.Count > 0 &&
-                dataGridView1.SelectedRows[0].DataBoundItem is Product product)
+            if (dataGridView1.SelectedRows.Count > 0)
             {
-                var result = MessageBox.Show(
-                    $"Удалить товар \"{product.ProductName}\"?",
-                    UiConstants.MessageBoxDeleteTitle,
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question);
-
-                if (result == DialogResult.Yes)
+                if (dataGridView1.SelectedRows[0].DataBoundItem is Product product)
                 {
-                    productService.Delete(product);
+                    var result = MessageBox.Show(
+                        $"Удалить товар \"{product.ProductName}\"?",
+                        UiConstants.MessageBoxDeleteTitle,
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        await productService.DeleteAsync(product);
+                        await ReloadGridAsync();
+                    }
                 }
             }
             else
@@ -95,44 +103,56 @@ namespace DataGridView.WinForms.Forms
         }
 
         /// <summary>
+        /// Асинхронно перезагружает данные в DataGridView
+        /// </summary>
+        private async Task ReloadGridAsync()
+        {
+            var data = await productService.GetAllAsync();
+            dataGridView1.DataSource = null;
+            dataGridView1.DataSource = data;
+        }
+
+        /// <summary>
         /// Отрисовка столбца, индикатор заполнения
         /// </summary>
         private void dataGridView1_CellPainting(object? sender, DataGridViewCellPaintingEventArgs e)
         {
             const int cellOffset = UiConstants.CellOffset;
 
-            if (e.ColumnIndex >= 0 && e.RowIndex >= 0 &&
-                dataGridView1.Columns[e.ColumnIndex].Name == UiConstants.QuantityColumnName)
+            if (e.ColumnIndex >= 0 && e.RowIndex >= 0)
             {
-                if (dataGridView1.Rows[e.RowIndex].DataBoundItem is Product product)
+                if (dataGridView1.Columns[e.ColumnIndex].Name == UiConstants.QuantityColumnName)
                 {
-                    e.Handled = true;
-                    e.PaintBackground(e.ClipBounds, false);
-
-                    using var borderPen = new Pen(UiConstants.QuantityProgressBarBorderColor);
-                    using var fillBrush = new SolidBrush(UiConstants.QuantityProgressBarFillColor);
-
-                    e.Graphics?.DrawRectangle(borderPen, new Rectangle(
-                        e.CellBounds.X + cellOffset,
-                        e.CellBounds.Y + cellOffset,
-                        e.CellBounds.Width - cellOffset * 2 - 1,
-                        e.CellBounds.Height - cellOffset * 2 - 1));
-
-                    var fillWidth = (product.Quantity *
-                        (e.CellBounds.Width - cellOffset * 2 - 1) / ValidationConstants.QuantityMax);
-
-                    e.Graphics?.FillRectangle(fillBrush, new Rectangle(
-                        e.CellBounds.X + cellOffset,
-                        e.CellBounds.Y + cellOffset,
-                        fillWidth,
-                        e.CellBounds.Height - cellOffset * 2 - 1));
-
-                    if (e.Graphics != null)
+                    if (dataGridView1.Rows[e.RowIndex].DataBoundItem is Product product)
                     {
-                        TextRenderer.DrawText(e.Graphics, product.Quantity.ToString(),
-                            e.CellStyle?.Font ?? dataGridView1.Font, e.CellBounds,
-                            UiConstants.QuantityProgressTextColor,
-                            TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+                        e.Handled = true;
+                        e.PaintBackground(e.ClipBounds, false);
+
+                        using var borderPen = new Pen(UiConstants.QuantityProgressBarBorderColor);
+                        using var fillBrush = new SolidBrush(UiConstants.QuantityProgressBarFillColor);
+
+                        e.Graphics?.DrawRectangle(borderPen, new Rectangle(
+                            e.CellBounds.X + cellOffset,
+                            e.CellBounds.Y + cellOffset,
+                            e.CellBounds.Width - cellOffset * 2 - 1,
+                            e.CellBounds.Height - cellOffset * 2 - 1));
+
+                        var fillWidth = (product.Quantity *
+                            (e.CellBounds.Width - cellOffset * 2 - 1) / ValidationConstants.QuantityMax);
+
+                        e.Graphics?.FillRectangle(fillBrush, new Rectangle(
+                            e.CellBounds.X + cellOffset,
+                            e.CellBounds.Y + cellOffset,
+                            fillWidth,
+                            e.CellBounds.Height - cellOffset * 2 - 1));
+
+                        if (e.Graphics != null)
+                        {
+                            TextRenderer.DrawText(e.Graphics, product.Quantity.ToString(),
+                                e.CellStyle?.Font ?? dataGridView1.Font, e.CellBounds,
+                                UiConstants.QuantityProgressTextColor,
+                                TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+                        }
                     }
                 }
             }

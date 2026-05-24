@@ -24,42 +24,42 @@ namespace DataGridView.Services.Services
         }
 
         /// <summary>
-        /// Возврат всех товаров с логированием времени выполнения
+        /// Асинхронный возврат всех товаров с логированием времени выполнения
         /// </summary>
-        public BindingList<Product> GetAll()
+        public async Task<BindingList<Product>> GetAllAsync()
         {
             var stopwatch = Stopwatch.StartNew();
             try
             {
-                return mainService.GetAll();
+                return await mainService.GetAllAsync();
             }
             finally
             {
                 stopwatch.Stop();
                 logger.LogInformation(
                     "Производительность: метод {MethodName} выполнен за {ElapsedMilliseconds} мс",
-                    nameof(GetAll),
+                    nameof(GetAllAsync),
                     stopwatch.ElapsedMilliseconds
                 );
             }
         }
 
         /// <summary>
-        /// Добавление нового товара с логированием времени выполнения
+        /// Асинхронное добавление нового товара с логированием времени выполнения
         /// </summary>
-        public void Add(Product product)
+        public async Task AddAsync(Product product)
         {
             var stopwatch = Stopwatch.StartNew();
             try
             {
-                mainService.Add(product);
+                await mainService.AddAsync(product);
             }
             finally
             {
                 stopwatch.Stop();
                 logger.LogInformation(
                     "Производительность: метод {MethodName} выполнен за {ElapsedMilliseconds} мс. Товар: {ProductName}",
-                    nameof(Add),
+                    nameof(AddAsync),
                     stopwatch.ElapsedMilliseconds,
                     product.ProductName
                 );
@@ -67,21 +67,21 @@ namespace DataGridView.Services.Services
         }
 
         /// <summary>
-        /// Обновление существующий товар с логированием времени выполнения
+        /// Асинхронное обновление существующего товара с логированием времени выполнения
         /// </summary>
-        public void Update(Product product)
+        public async Task UpdateAsync(Product product)
         {
             var stopwatch = Stopwatch.StartNew();
             try
             {
-                mainService.Update(product);
+                await mainService.UpdateAsync(product);
             }
             finally
             {
                 stopwatch.Stop();
                 logger.LogInformation(
                     "Производительность: метод {MethodName} выполнен за {ElapsedMilliseconds} мс. Товар: {ProductName}",
-                    nameof(Update),
+                    nameof(UpdateAsync),
                     stopwatch.ElapsedMilliseconds,
                     product.ProductName
                 );
@@ -89,21 +89,21 @@ namespace DataGridView.Services.Services
         }
 
         /// <summary>
-        /// Удаление товара с логированием времени выполнения
+        /// Асинхронное удаление товара с логированием времени выполнения
         /// </summary>
-        public void Delete(Product product)
+        public async Task DeleteAsync(Product product)
         {
             var stopwatch = Stopwatch.StartNew();
             try
             {
-                mainService.Delete(product);
+                await mainService.DeleteAsync(product);
             }
             finally
             {
                 stopwatch.Stop();
                 logger.LogInformation(
                     "Производительность: метод {MethodName} выполнен за {ElapsedMilliseconds} мс. Товар: {ProductName}",
-                    nameof(Delete),
+                    nameof(DeleteAsync),
                     stopwatch.ElapsedMilliseconds,
                     product.ProductName
                 );

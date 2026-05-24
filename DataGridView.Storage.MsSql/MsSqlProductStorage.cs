@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using DataGridView.Models;
 using DataGridView.Storage.Contracts;
 using Microsoft.EntityFrameworkCore;
@@ -8,80 +8,66 @@ namespace DataGridView.Storage.MsSql;
 /// <summary>
 /// Репозиторий для работы с товарами через MS SQL Server
 /// </summary>
-public class MsSqlProductStorage : IProductStorage
+public class MsSqlProductStorage(MsSqlProductContext context) : IProductStorage
 {
+    private readonly MsSqlProductContext context = context;
+
     /// <summary>
-    /// Получает все товары
+    /// Асинхронно получает все товары
     /// </summary>
-    public BindingList<Product> GetAll()
+    public async Task<BindingList<Product>> GetAllAsync()
     {
-        using var db = new MsSqlProductContext();
-        var items = db.Products
+        var result = await context.Products
             .AsNoTracking()
             .OrderBy(p => p.ProductName)
-            .ToList();
+            .ToListAsync();
 
-        return new BindingList<Product>(items);
+        return new BindingList<Product>(result);
     }
 
     /// <summary>
-    /// Добавляет новый товар
+    /// Асинхронно добавляет новый товар
     /// </summary>
-    public void Add(Product product)
+    public async Task AddAsync(Product product)
     {
-        using var db = new MsSqlProductContext();
-        product.Id = 0;
-        db.Products.Add(product);
-        db.SaveChanges();
+        await context.Products.AddAsync(product);
+        await context.SaveChangesAsync();
     }
 
     /// <summary>
-    /// Обновляет существующий товар
+    /// Асинхронно обновляет существующий товар
     /// </summary>
-    public void Update(Product product)
+    public async Task UpdateAsync(Product product)
     {
-        using var db = new MsSqlProductContext();
-        var existing = db.Products.Find(product.Id);
-        if (existing == null)
+        context.Products.Update(product);
+        await context.SaveChangesAsync();
+    }
+
+    /// <summary>
+    /// Асинхронно удаляет товар
+    /// </summary>
+    public async Task DeleteAsync(Product product)
+    {
+        var item = await context.Products.FirstOrDefaultAsync(x => x.Id == product.Id);
+        if (item != null)
         {
-            return;
+            context.Products.Remove(item);
+            await context.SaveChangesAsync();
         }
-
-        existing.ProductName = product.ProductName;
-        existing.ProductSize = product.ProductSize;
-        existing.Material = product.Material;
-        existing.Price = product.Price;
-        existing.Quantity = product.Quantity;
-        existing.MinQuantity = product.MinQuantity;
-
-        db.Products.Update(existing);
-        db.SaveChanges();
     }
 
     /// <summary>
-    /// Удаляет товар
+    /// Асинхронно получает следующий доступный ID
     /// </summary>
-    public void Delete(Product product)
+    public async Task<int> GetNextIdAsync()
     {
-        using var db = new MsSqlProductContext();
-        var item = db.Products.Find(product.Id);
-        if (item == null)
+        if (await context.Products.AnyAsync())
         {
-            return;
+            return await context.Products.MaxAsync(p => p.Id) + 1;
         }
-
-        db.Products.Remove(item);
-        db.SaveChanges();
-    }
-
-    /// <summary>
-    /// Получает следующий доступный ID
-    /// </summary>
-    public int GetNextId()
-    {
-        using var db = new MsSqlProductContext();
-        return db.Products.Any()
-            ? db.Products.Max(p => p.Id) + 1
-            : 1;
+        else
+        {
+            return 1;
+        }
     }
 }
