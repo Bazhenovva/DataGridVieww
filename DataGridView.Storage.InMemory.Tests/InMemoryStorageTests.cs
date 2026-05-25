@@ -13,27 +13,28 @@ namespace DataGridView.Storage.InMemory.Tests
         /// Тест проверяет что конструктор создает четыре товара с идентификаторами 1,2,3,4
         /// </summary>
         [Fact]
-        public void ConstructorShouldSetCorrectIds()
+        public async Task ConstructorShouldSetCorrectIds()
         {
             // arrange и act
             var storage = new InMemoryProductStorage();
 
             // assert
-            storage.GetAll().Select(p => p.Id).Should().Equal(1, 2, 3, 4);
+            var products = await storage.GetAllAsync();
+            products.Select(p => p.Id).Should().Equal(1, 2, 3, 4);
         }
 
         /// <summary>
         /// Тест проверяет что метод GetAll возвращает ту же коллекцию
         /// </summary>
         [Fact]
-        public void GetAllShouldReturnProducts()
+        public async Task GetAllShouldReturnProducts()
         {
             // arrange
             var storage = new InMemoryProductStorage();
-            var expected = storage.GetAll();
+            var expected = await storage.GetAllAsync();
 
             // act
-            var result = storage.GetAll();
+            var result = await storage.GetAllAsync();
 
             // assert
             result.Should().BeSameAs(expected);
@@ -43,7 +44,7 @@ namespace DataGridView.Storage.InMemory.Tests
         /// Тест проверяет что метод Add добавляет товар в коллекцию
         /// </summary>
         [Fact]
-        public void AddShouldAddProductToCollection()
+        public async Task AddShouldAddProductToCollection()
         {
             // Arrange
             var storage = new InMemoryProductStorage();
@@ -58,18 +59,18 @@ namespace DataGridView.Storage.InMemory.Tests
             };
 
             // Act
-            storage.Add(newProduct);
+            await storage.AddAsync(newProduct);
 
             // Assert
-            storage.GetAll().Should().Contain(newProduct);
-
+            var all = await storage.GetAllAsync();
+            all.Should().Contain(newProduct);
         }
 
         /// <summary>
         /// Тест проверяет что при обновлении существующего товара он заменяется новым
         /// </summary>
         [Fact]
-        public void UpdateShouldReplaceExistingProduct()
+        public async Task UpdateShouldReplaceExistingProduct()
         {
             // Arrange
             var storage = new InMemoryProductStorage();
@@ -85,10 +86,11 @@ namespace DataGridView.Storage.InMemory.Tests
             };
 
             // Act
-            storage.Update(updatedProduct);
+            await storage.UpdateAsync(updatedProduct);
 
             // Assert
-            var productInStorage = storage.GetAll().First(p => p.Id == 1);
+            var all = await storage.GetAllAsync();
+            var productInStorage = all.First(p => p.Id == 1);
             productInStorage.ProductName.Should().Be("Шурупы");
             productInStorage.ProductSize.Should().Be(ProductSize.M8);
             productInStorage.Material.Should().Be(Material.Copper);
@@ -101,11 +103,12 @@ namespace DataGridView.Storage.InMemory.Tests
         /// Тест проверяет что при обновлении несуществующего товара коллекция не изменяется
         /// </summary>
         [Fact]
-        public void UpdateShouldNotUpdateAnythingWhenProductNotFound()
+        public async Task UpdateShouldNotUpdateAnythingWhenProductNotFound()
         {
             // Arrange
             var storage = new InMemoryProductStorage();
-            var originalProduct = storage.GetAll().First(p => p.Id == 1);
+            var allBefore = await storage.GetAllAsync();
+            var originalProduct = allBefore.First(p => p.Id == 1);
             var nonExistentProduct = new Product
             {
                 Id = 999,
@@ -118,10 +121,11 @@ namespace DataGridView.Storage.InMemory.Tests
             };
 
             // Act
-            storage.Update(nonExistentProduct);
+            await storage.UpdateAsync(nonExistentProduct);
 
             // Assert
-            var productInStorage = storage.GetAll().First(p => p.Id == 1);
+            var allAfter = await storage.GetAllAsync();
+            var productInStorage = allAfter.First(p => p.Id == 1);
             productInStorage.ProductName.Should().Be(originalProduct.ProductName);
             productInStorage.ProductSize.Should().Be(originalProduct.ProductSize);
             productInStorage.Material.Should().Be(originalProduct.Material);
@@ -134,36 +138,36 @@ namespace DataGridView.Storage.InMemory.Tests
         /// Тест проверяет что метод Delete удаляет товар из коллекции
         /// </summary>
         [Fact]
-        public void DeleteShouldRemoveProduct()
+        public async Task DeleteShouldRemoveProduct()
         {
             // Arrange
             var storage = new InMemoryProductStorage();
-            var product = storage.GetAll().First();
+            var all = await storage.GetAllAsync();
+            var product = all.First();
 
             // Act
-            storage.Delete(product);
+            await storage.DeleteAsync(product);
 
             // Assert
-            storage.GetAll().Count.Should().Be(3);
+            var remaining = await storage.GetAllAsync();
+            remaining.Count.Should().Be(3);
         }
 
         /// <summary>
         /// Тест проверяет что метод GetNextId возвращает увеличивающиеся идентификаторы
         /// </summary>
         [Fact]
-        public void GetNextIdShouldReturnIncreasingIds()
+        public async Task GetNextIdShouldReturnIncreasingIds()
         {
             // Arrange
             var storage = new InMemoryProductStorage();
 
             // Act
-            var firstId = storage.GetNextId();
-            var secondId = storage.GetNextId();
+            var firstId = await storage.GetNextIdAsync();
+            var secondId = await storage.GetNextIdAsync();
 
             // Assert
             secondId.Should().Be(firstId + 1);
         }
-
     }
-
 }

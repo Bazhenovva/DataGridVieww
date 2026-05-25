@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Linq;
 using DataGridView.Models;
 using DataGridView.Services.Contracts;
 using DataGridView.Storage.Contracts;
@@ -20,6 +19,7 @@ namespace DataGridView.Services.Services
         public ProductService(IProductStorage storage)
         {
             this.storage = storage;
+            products = new BindingList<Product>();
         }
 
         /// <summary>
@@ -37,8 +37,9 @@ namespace DataGridView.Services.Services
         /// </summary>
         public async Task AddAsync(Product product)
         {
+            product.Id = await storage.GetNextIdAsync();
             await storage.AddAsync(product);
-            products?.Add(product);
+            products.Add(product);
         }
 
         /// <summary>
@@ -47,19 +48,16 @@ namespace DataGridView.Services.Services
         public async Task UpdateAsync(Product product)
         {
             await storage.UpdateAsync(product);
-            if (products != null)
+            var existing = products.FirstOrDefault(p => p.Id == product.Id);
+            if (existing != null)
             {
-                var existing = products.FirstOrDefault(p => p.Id == product.Id);
-                if (existing != null)
-                {
-                    existing.ProductName = product.ProductName;
-                    existing.ProductSize = product.ProductSize;
-                    existing.Material = product.Material;
-                    existing.Price = product.Price;
-                    existing.MinQuantity = product.MinQuantity;
-                    existing.Quantity = product.Quantity;
-                    products.ResetItem(products.IndexOf(existing));
-                }
+                existing.ProductName = product.ProductName;
+                existing.ProductSize = product.ProductSize;
+                existing.Material = product.Material;
+                existing.Price = product.Price;
+                existing.MinQuantity = product.MinQuantity;
+                existing.Quantity = product.Quantity;
+                products.ResetItem(products.IndexOf(existing));
             }
         }
 
@@ -69,7 +67,7 @@ namespace DataGridView.Services.Services
         public async Task DeleteAsync(Product product)
         {
             await storage.DeleteAsync(product);
-            products?.Remove(product);
+            products.Remove(product);
         }
     }
 }
