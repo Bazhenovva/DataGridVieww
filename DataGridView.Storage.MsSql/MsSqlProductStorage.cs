@@ -30,6 +30,7 @@ public class MsSqlProductStorage(MsSqlProductContext context) : IProductStorage
     /// </summary>
     public async Task AddAsync(Product product)
     {
+        product.Id = 0;
         await context.Products.AddAsync(product);
         await context.SaveChangesAsync();
     }
@@ -39,7 +40,19 @@ public class MsSqlProductStorage(MsSqlProductContext context) : IProductStorage
     /// </summary>
     public async Task UpdateAsync(Product product)
     {
-        context.Products.Update(product);
+        var existing = await context.Products.FindAsync(product.Id);
+        if (existing == null)
+        {
+            return;
+        }
+
+        existing.ProductName = product.ProductName;
+        existing.ProductSize = product.ProductSize;
+        existing.Material = product.Material;
+        existing.Price = product.Price;
+        existing.Quantity = product.Quantity;
+        existing.MinQuantity = product.MinQuantity;
+
         await context.SaveChangesAsync();
     }
 
@@ -48,12 +61,14 @@ public class MsSqlProductStorage(MsSqlProductContext context) : IProductStorage
     /// </summary>
     public async Task DeleteAsync(Product product)
     {
-        var item = await context.Products.FirstOrDefaultAsync(x => x.Id == product.Id);
-        if (item != null)
+        var item = await context.Products.FindAsync(product.Id);
+        if (item == null)
         {
-            context.Products.Remove(item);
-            await context.SaveChangesAsync();
+            return;
         }
+
+        context.Products.Remove(item);
+        await context.SaveChangesAsync();
     }
 
     /// <summary>

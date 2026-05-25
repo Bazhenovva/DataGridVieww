@@ -1,9 +1,10 @@
 using DataGridView.Services.Services;
+using DataGridView.Storage.MsSql;
 using DataGridView.WinForms.Forms;
-using Serilog.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using DataGridView.Storage.MsSql;
+using Serilog.Extensions.Logging;
 
 namespace DataGridView.WinForms
 {
@@ -35,7 +36,6 @@ namespace DataGridView.WinForms
             ApplicationConfiguration.Initialize();
 
             var context = new MsSqlProductContext();
-
             var storage = new MsSqlProductStorage(context);
 
             var productService = new ProductService(storage);

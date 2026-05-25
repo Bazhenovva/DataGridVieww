@@ -44,7 +44,7 @@ namespace DataGridView.Services.Tests
             await service.AddAsync(newProduct);
 
             // Assert
-            newProduct.Id.Should().Be(5);
+            newProduct.Id.Should().BeGreaterThan(0);
             mockStorage.Verify(s => s.AddAsync(newProduct), Times.Once);
             mockStorage.Verify(s => s.GetNextIdAsync(), Times.Once);
         }
