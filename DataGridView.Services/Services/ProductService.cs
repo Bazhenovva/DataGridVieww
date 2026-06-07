@@ -14,7 +14,7 @@ namespace DataGridView.Services.Services
         private BindingList<Product> products;
 
         /// <summary>
-        /// Инициализирует новый экземпляр сервиса
+        /// Инициализирует  новый экземпляр сервиса
         /// </summary>
         public ProductService(IProductStorage storage)
         {
