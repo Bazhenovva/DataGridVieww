@@ -4,33 +4,33 @@ using DataGridView.Models;
 namespace DataGridView.Storage.Contracts
 {
     /// <summary>
-    /// Интерфейс хранилища данных для товаров
+    /// Интерфейс хранилища данных для товаров 
     /// </summary>
     public interface IProductStorage
     {
         /// <summary>
-        /// получить все товары
+        /// Получить все товары
         /// </summary>
-        BindingList<Product> GetAll();
+        Task<BindingList<Product>> GetAllAsync();
 
         /// <summary>
-        /// добавить новый товар
+        /// Добавить новый товар
         /// </summary>
-        void Add(Product product);
+        Task AddAsync(Product product);
 
         /// <summary>
-        /// обновить существующий товар
+        /// Обновить существующий товар
         /// </summary>
-        void Update(Product product);
+        Task UpdateAsync(Product product);
 
         /// <summary>
-        /// удалить товар
+        /// Удалить товар
         /// </summary>
-        void Delete(Product product);
+        Task DeleteAsync(Product product);
 
         /// <summary>
-        /// получить следующий доступный ID
+        /// Получить следующий доступный ID
         /// </summary>
-        int GetNextId();
+        Task<int> GetNextIdAsync();
     }
 }

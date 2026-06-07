@@ -4,28 +4,28 @@ using DataGridView.Models;
 namespace DataGridView.Services.Contracts
 {
     /// <summary>
-    /// Интерфейс сервиса для управления товарами в реестре
+    /// Интерфейс сервиса для управления товарами в реестре 
     /// </summary>
     public interface IProductService
     {
         /// <summary>
-        /// получить все товары
+        /// Получить все товары
         /// </summary>
-        BindingList<Product> GetAll();
+        Task<BindingList<Product>> GetAllAsync();
 
         /// <summary>
-        /// добавить новый товар
+        /// Добавить новый товар
         /// </summary>
-        void Add(Product product);
+        Task AddAsync(Product product);
 
         /// <summary>
-        /// обновить существующий товар
+        /// Обновить существующий товар
         /// </summary>
-        void Update(Product product);
+        Task UpdateAsync(Product product);
 
         /// <summary>
-        /// удалить товар
+        /// Удалить товар
         /// </summary>
-        void Delete(Product product);
+        Task DeleteAsync(Product product);
     }
 }

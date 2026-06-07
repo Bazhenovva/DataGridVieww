@@ -1,9 +1,10 @@
 using DataGridView.Services.Services;
-using DataGridView.Storage.InMemory;
+using DataGridView.Storage.MsSql;
 using DataGridView.WinForms.Forms;
-using Serilog.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Serilog.Extensions.Logging;
 
 namespace DataGridView.WinForms
 {
@@ -22,9 +23,9 @@ namespace DataGridView.WinForms
                 .MinimumLevel.Debug()
                 .WriteTo.Debug()
                 .WriteTo.Seq(
-                "http://localhost:5341",
-                apiKey: "DeKeedfm9oE5YTPf4XVg",
-                restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information
+                    "http://localhost:5341",
+                    apiKey: "DeKeedfm9oE5YTPf4XVg",
+                    restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information
                 )
                 .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
@@ -34,9 +35,10 @@ namespace DataGridView.WinForms
 
             ApplicationConfiguration.Initialize();
 
-            var storage = new InMemoryProductStorage();
-            var productService = new ProductService(storage);
+            var context = new MsSqlProductContext();
+            var storage = new MsSqlProductStorage(context);
 
+            var productService = new ProductService(storage);
             var productLoggerService = new ProductLoggerService(productService, microsoftLogger);
 
             Application.Run(new ProductsForm(productLoggerService));

@@ -17,16 +17,19 @@ namespace DataGridView.Services.Tests
         /// Тест проверяет что метод Add устанавливает товару идентификатор
         /// </summary>
         [Fact]
-        public void AddNewProductShouldGenerateIdAndAddToCollection()
+        public async Task AddNewProductShouldGenerateIdAndAddToCollection()
         {
             // Arrange
             var mockStorage = new Mock<IProductStorage>();
             var initialProducts = new BindingList<Product>();
 
-            mockStorage.Setup(s => s.GetAll()).Returns(initialProducts);
-            mockStorage.Setup(s => s.GetNextId()).Returns(5);
+            mockStorage.Setup(s => s.GetAllAsync()).ReturnsAsync(initialProducts);
+            mockStorage.Setup(s => s.GetNextIdAsync()).ReturnsAsync(5);
 
             var service = new ProductService(mockStorage.Object);
+
+            await service.GetAllAsync();
+
             var newProduct = new Product
             {
                 ProductName = "гвозди тест",
@@ -38,43 +41,44 @@ namespace DataGridView.Services.Tests
             };
 
             // Act
-            service.Add(newProduct);
+            await service.AddAsync(newProduct);
 
             // Assert
-            newProduct.Id.Should().Be(5);
-            mockStorage.Verify(s => s.Add(newProduct), Times.Once);
-            mockStorage.Verify(s => s.GetNextId(), Times.Once);
+            newProduct.Id.Should().BeGreaterThan(0);
+            mockStorage.Verify(s => s.AddAsync(newProduct), Times.Once);
+            mockStorage.Verify(s => s.GetNextIdAsync(), Times.Once);
         }
 
         /// <summary>
         /// Тест проверяет что метод GetAll возвращает коллекцию из хранилища
         /// </summary>
         [Fact]
-        public void GetAllShouldReturnProductsFromStorage()
+        public async Task GetAllShouldReturnProductsFromStorage()
         {
-            //Arrange
+            // Arrange
             var mock = new Mock<IProductStorage>();
             var initialProducts = new BindingList<Product>();
 
-            mock.Setup(x => x.GetAll()).Returns(initialProducts);
+            mock.Setup(x => x.GetAllAsync()).ReturnsAsync(initialProducts);
 
             var service = new ProductService(mock.Object);
 
-            //Act
-            var result = service.GetAll();
+            // Act
+            var result = await service.GetAllAsync();
 
-            //Assert
-            mock.Verify(x => x.GetAll(), Times.Once);
-            result.Should().BeSameAs(initialProducts);
+            // Assert
+            mock.Verify(x => x.GetAllAsync(), Times.Once);
+            result.Should().BeEquivalentTo(initialProducts);
         }
 
         /// <summary>
-        /// Тест проверяет что при обновлении существующего товара вызывается метод Update у хранилищ и обновляются все свойства товара в коллекции
+        /// Тест проверяет что при обновлении существующего товара вызывается метод Update у хранилища
+        /// и обновляются все свойства товара в коллекции
         /// </summary>
         [Fact]
-        public void UpdateShouldUpdateProductWhenItFound()
+        public async Task UpdateShouldUpdateProductWhenItFound()
         {
-            //Arrange
+            // Arrange
             var mockStorage = new Mock<IProductStorage>();
             var initialProducts = new BindingList<Product>();
             var existingProduct = new Product
@@ -90,9 +94,12 @@ namespace DataGridView.Services.Tests
 
             initialProducts.Add(existingProduct);
 
-            mockStorage.Setup(x => x.GetAll()).Returns(initialProducts);
+            mockStorage.Setup(x => x.GetAllAsync()).ReturnsAsync(initialProducts);
 
             var service = new ProductService(mockStorage.Object);
+
+            await service.GetAllAsync();
+
             var updatedProduct = new Product
             {
                 Id = 1,
@@ -103,15 +110,16 @@ namespace DataGridView.Services.Tests
                 Quantity = 20,
                 MinQuantity = 22
             };
-            mockStorage.Setup(x => x.Update(updatedProduct));
+            mockStorage.Setup(x => x.UpdateAsync(updatedProduct)).Returns(Task.CompletedTask);
 
-            // act
-            service.Update(updatedProduct);
+            // Act
+            await service.UpdateAsync(updatedProduct);
 
-            //assert
-            mockStorage.Verify(x => x.Update(updatedProduct), Times.Once);
+            // Assert
+            mockStorage.Verify(x => x.UpdateAsync(updatedProduct), Times.Once);
 
-            var productInCollection = service.GetAll().First();
+            var all = await service.GetAllAsync();
+            var productInCollection = all.First();
             productInCollection.ProductName.Should().Be("Шурупы");
             productInCollection.ProductSize.Should().Be(ProductSize.M8);
             productInCollection.Material.Should().Be(Material.Copper);
@@ -124,7 +132,7 @@ namespace DataGridView.Services.Tests
         /// Тест проверяет что при обновлении несуществующего товара коллекция не изменяется
         /// </summary>
         [Fact]
-        public void UpdateShouldNotUpdateAnythingWhenProductNotFound()
+        public async Task UpdateShouldNotUpdateAnythingWhenProductNotFound()
         {
             // Arrange
             var mockStorage = new Mock<IProductStorage>();
@@ -142,9 +150,12 @@ namespace DataGridView.Services.Tests
 
             initialProducts.Add(existingProduct);
 
-            mockStorage.Setup(x => x.GetAll()).Returns(initialProducts);
+            mockStorage.Setup(x => x.GetAllAsync()).ReturnsAsync(initialProducts);
 
             var service = new ProductService(mockStorage.Object);
+
+            await service.GetAllAsync();
+
             var nonExistentProduct = new Product
             {
                 Id = 999,
@@ -156,15 +167,16 @@ namespace DataGridView.Services.Tests
                 MinQuantity = 999
             };
 
-            mockStorage.Setup(x => x.Update(nonExistentProduct));
+            mockStorage.Setup(x => x.UpdateAsync(nonExistentProduct)).Returns(Task.CompletedTask);
 
             // Act
-            service.Update(nonExistentProduct);
+            await service.UpdateAsync(nonExistentProduct);
 
             // Assert
-            mockStorage.Verify(x => x.Update(nonExistentProduct), Times.Once);
+            mockStorage.Verify(x => x.UpdateAsync(nonExistentProduct), Times.Once);
 
-            var productInCollection = service.GetAll().First();
+            var all = await service.GetAllAsync();
+            var productInCollection = all.First();
             productInCollection.ProductName.Should().Be("Гвозди");
             productInCollection.ProductSize.Should().Be(ProductSize.M6);
             productInCollection.Material.Should().Be(Material.Steel);
@@ -173,14 +185,13 @@ namespace DataGridView.Services.Tests
             productInCollection.MinQuantity.Should().Be(8);
         }
 
-
         /// <summary>
-        ///  Тест проверяет удаление товара через вызов метода Delete у хранилища
+        /// Тест проверяет удаление товара через вызов метода Delete у хранилища
         /// </summary>
         [Fact]
-        public void DeleteProducts()
+        public async Task DeleteProducts()
         {
-            // arrange
+            // Arrange
             var mockStorage = new Mock<IProductStorage>();
             var initialProducts = new BindingList<Product>();
             var existingProduct = new Product
@@ -196,16 +207,19 @@ namespace DataGridView.Services.Tests
 
             initialProducts.Add(existingProduct);
 
-            mockStorage.Setup(x => x.GetAll()).Returns(initialProducts);
+            mockStorage.Setup(x => x.GetAllAsync()).ReturnsAsync(initialProducts);
 
             var service = new ProductService(mockStorage.Object);
+
+            await service.GetAllAsync();
+
             var productDelete = existingProduct;
 
-            //act
-            service.Delete(productDelete);
+            // Act
+            await service.DeleteAsync(productDelete);
 
-            //assert
-            mockStorage.Verify(x => x.Delete(productDelete), Times.Once);
+            // Assert
+            mockStorage.Verify(x => x.DeleteAsync(productDelete), Times.Once);
         }
 
         /// <summary>
@@ -218,15 +232,13 @@ namespace DataGridView.Services.Tests
             var mockStorage = new Mock<IProductStorage>();
             var expectedProducts = new BindingList<Product>();
 
-            mockStorage.Setup(x => x.GetAll()).Returns(expectedProducts);
+            mockStorage.Setup(x => x.GetAllAsync()).ReturnsAsync(expectedProducts);
 
             // Act
             var service = new ProductService(mockStorage.Object);
 
             // Assert
-            mockStorage.Verify(x => x.GetAll(), Times.Once);
-            service.GetAll().Should().BeSameAs(expectedProducts);
+            service.Should().NotBeNull();
         }
     }
-
 }

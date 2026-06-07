@@ -1,4 +1,6 @@
 using System.ComponentModel;
+using System.Linq;
+using System.Threading.Tasks;
 using DataGridView.Models;
 using DataGridView.Models.Constants;
 using DataGridView.Storage.Contracts;
@@ -6,7 +8,7 @@ using DataGridView.Storage.Contracts;
 namespace DataGridView.Storage.InMemory
 {
     /// <summary>
-    /// хранилище товаров в памяти
+    /// Хранилище товаров в памяти
     /// </summary>
     public class InMemoryProductStorage : IProductStorage
     {
@@ -14,12 +16,12 @@ namespace DataGridView.Storage.InMemory
         private int nextId;
 
         /// <summary>
-        /// конструктор с тестовыми данными
+        /// Конструктор с тестовыми данными
         /// </summary>
         public InMemoryProductStorage()
         {
             products = [];
-            nextId =  BusinessConstants.InitialId;
+            nextId = BusinessConstants.InitialId;
 
             products.Add(new Product("Гвоздь", ProductSize.Size10Mm, Material.Steel, 100, 20, 3.5m) { Id = nextId++ });
             products.Add(new Product("Гайка", ProductSize.M8, Material.Copper, 50, 10, 7.2m) { Id = nextId++ });
@@ -28,22 +30,27 @@ namespace DataGridView.Storage.InMemory
         }
 
         /// <summary>
-        /// получить все товары
+        /// Асинхронно получает все товары
         /// </summary>
-        public BindingList<Product> GetAll() => products;
+        public async Task<BindingList<Product>> GetAllAsync()
+        {
+            return products;
+        }
 
         /// <summary>
-        /// добавить новый товар
+        /// Асинхронно добавляет новый товар
         /// </summary>
-        public void Add(Product product)
+        public async Task AddAsync(Product product)
         {
+            product.Id = nextId;
+            nextId++;
             products.Add(product);
         }
 
         /// <summary>
-        /// обновить существующий товар
+        /// Асинхронно обновляет существующий товар
         /// </summary>
-        public void Update(Product product)
+        public async Task UpdateAsync(Product product)
         {
             var existing = products.FirstOrDefault(p => p.Id == product.Id);
             if (existing != null)
@@ -54,16 +61,19 @@ namespace DataGridView.Storage.InMemory
         }
 
         /// <summary>
-        /// удалить товар
+        /// Асинхронно удаляет товар
         /// </summary>
-        public void Delete(Product product)
+        public async Task DeleteAsync(Product product)
         {
             products.Remove(product);
         }
 
         /// <summary>
-        /// получить следующий доступный ID
+        /// Асинхронно получает следующий доступный ID
         /// </summary>
-        public int GetNextId() => nextId++;
+        public async Task<int> GetNextIdAsync()
+        {
+            return nextId++;
+        }
     }
 }
