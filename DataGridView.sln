@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataGridView.Storage.InMemo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataGridView.Storage.MsSql", "DataGridView.Storage.MsSql\DataGridView.Storage.MsSql.csproj", "{A584DA47-22B3-4373-84A8-2D0B6A07088C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataGridView.Web", "DataGridView.Web\DataGridView.Web.csproj", "{F8291E40-5173-466C-BA08-BE5DF6C2234A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{A584DA47-22B3-4373-84A8-2D0B6A07088C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A584DA47-22B3-4373-84A8-2D0B6A07088C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A584DA47-22B3-4373-84A8-2D0B6A07088C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8291E40-5173-466C-BA08-BE5DF6C2234A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8291E40-5173-466C-BA08-BE5DF6C2234A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8291E40-5173-466C-BA08-BE5DF6C2234A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8291E40-5173-466C-BA08-BE5DF6C2234A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
