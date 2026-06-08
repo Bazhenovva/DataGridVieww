@@ -39,6 +39,7 @@ public class ProductRepository : IProductStorage
     /// </summary>
     public async Task AddAsync(Product product)
     {
+        product.Id = 0;
         writer.Add(product);
         await writer.SaveChangesAsync();
     }

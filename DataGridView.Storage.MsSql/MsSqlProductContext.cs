@@ -15,13 +15,21 @@ public class MsSqlProductContext : DbContext, IReader, IWriter
     public DbSet<Product> Products { get; set; }
 
     /// <summary>
-    /// Инициализирует контекст и создаёт БД при первом запуске.
+    /// Конструктор без параметров (для миграций)
     /// </summary>
     public MsSqlProductContext() => Database.EnsureCreated();
 
     /// <summary>
-    /// Преобразует <see cref="Material"/> и <see cref="ProductSize"/> в строку БД,
-    /// так как эти модели имеют приватные поля и не могут быть сохранены напрямую.
+    /// Конструктор с опциями (для DI через AddDbContext)
+    /// </summary>
+    public MsSqlProductContext(DbContextOptions<MsSqlProductContext> options)
+        : base(options)
+    {
+        Database.EnsureCreated();
+    }
+
+    /// <summary>
+    /// Преобразует <see cref="Material"/> и <see cref="ProductSize"/> в строку БД
     /// </summary>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -43,9 +51,6 @@ public class MsSqlProductContext : DbContext, IReader, IWriter
         });
     }
 
-    /// <summary>
-    /// Восстанавливает экземпляр <see cref="Material"/> из строки БД.
-    /// </summary>
     private static Material ParseMaterial(string value)
     {
         return value switch
@@ -58,9 +63,6 @@ public class MsSqlProductContext : DbContext, IReader, IWriter
         };
     }
 
-    /// <summary>
-    /// Восстанавливает экземпляр <see cref="ProductSize"/> из строки БД.
-    /// </summary>
     private static ProductSize ParseProductSize(string value)
     {
         return value switch
@@ -74,12 +76,8 @@ public class MsSqlProductContext : DbContext, IReader, IWriter
             _ => ProductSize.M6
         };
     }
-    /// <summary>
-    ///
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <returns></returns>
-    public IQueryable<TEntity>Read<TEntity>() where TEntity :class
+
+    public IQueryable<TEntity> Read<TEntity>() where TEntity : class
     {
         return base.Set<TEntity>()
             .AsNoTracking()
@@ -101,4 +99,8 @@ public class MsSqlProductContext : DbContext, IReader, IWriter
         base.Remove(entity);
     }
 
+    async Task<int> IWriter.SaveChangesAsync(CancellationToken cancellationToken)
+    {
+        return await base.SaveChangesAsync(cancellationToken);
+    }
 }

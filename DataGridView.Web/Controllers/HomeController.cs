@@ -2,6 +2,7 @@ using System.Diagnostics;
 using DataGridView.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using DataGridView.Web.Models;
+using DataGridView.Models;
 
 namespace DataGridView.Web.Controllers;
 
@@ -13,10 +14,32 @@ public class HomeController : Controller
     {
         this.productService = productService;
     }
+
     public async Task<IActionResult> Index()
     {
         var products = await productService.GetAllAsync();
         return View(products);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create(Product product)
+    {
+        await productService.AddAsync(product);
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Edit(Product product)
+    {
+        await productService.UpdateAsync(product);
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Delete(Product product)
+    {
+        await productService.DeleteAsync(product);
+        return RedirectToAction(nameof(Index));
     }
 
     public IActionResult Privacy()

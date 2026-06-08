@@ -1,39 +1,279 @@
-﻿@model IReadOnlyCollection<DataGridView.Models.Product>
+﻿@using System.Globalization
+@model System.ComponentModel.BindingList<DataGridView.Models.Product>
+
 @{
-ViewData["Title"] = "Home Page";
+	ViewData["Title"] = "Реестр товаров";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Реестр гвоздей</h1>
-    <p>Управление товарами на складе</p>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-4">
+	<h2 class="mb-4">Реестр товаров</h2>
+
+	@if (Model == null || Model.Count == 0)
+	{
+		<div class="alert alert-info">
+			Товаров пока нет
+		</div>
+	}
+	else
+	{
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Название</th>
+					<th>Размер</th>
+					<th>Материал</th>
+					<th>Цена</th>
+					<th>Количество</th>
+					<th>Мин. запас</th>
+					<th>Общая стоимость</th>
+					<th>Действия</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var product in Model)
+				{
+					<tr>
+						<td>@product.Id</td>
+						<td>@product.ProductName</td>
+						<td>@product.ProductSize</td>
+						<td>@product.Material</td>
+						<td>@product.Price.ToString("F2")</td>
+						<td>@product.Quantity</td>
+						<td>@product.MinQuantity</td>
+						<td>@product.TotalAmount.ToString("F2")</td>
+						<td>
+							<button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#editModal-@product.Id">
+								Изменить
+							</button>
+							<button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#deleteModal-@product.Id">
+								Удалить
+							</button>
+						</td>
+					</tr>
+
+					<!-- Модалка редактирования -->
+					<div class="modal fade" id="editModal-@product.Id" tabindex="-1">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<form asp-action="Edit" method="post">
+									<div class="modal-header">
+										<h5 class="modal-title">Редактировать товар</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+									</div>
+									<div class="modal-body">
+										<input type="hidden" name="Id" value="@product.Id" />
+
+										<div class="mb-3">
+											<label class="form-label">Название товара</label>
+											<input name="ProductName" class="form-control" value="@product.ProductName" required />
+										</div>
+
+										<div class="mb-3">
+											<label class="form-label">Размер</label>
+											<select name="ProductSize" class="form-select">
+												@if (product.ProductSize == DataGridView.Models.ProductSize.M6)
+												{
+													<option value="M6" selected>M6</option>
+												}
+												else
+												{
+													<option value="M6">M6</option>
+												}
+												@if (product.ProductSize == DataGridView.Models.ProductSize.M8)
+												{
+													<option value="M8" selected>M8</option>
+												}
+												else
+												{
+													<option value="M8">M8</option>
+												}
+												@if (product.ProductSize == DataGridView.Models.ProductSize.M10)
+												{
+													<option value="M10" selected>M10</option>
+												}
+												else
+												{
+													<option value="M10">M10</option>
+												}
+												@if (product.ProductSize == DataGridView.Models.ProductSize.M12)
+												{
+													<option value="M12" selected>M12</option>
+												}
+												else
+												{
+													<option value="M12">M12</option>
+												}
+												@if (product.ProductSize == DataGridView.Models.ProductSize.Size10Mm)
+												{
+													<option value="Size10Mm" selected>10 мм</option>
+												}
+												else
+												{
+													<option value="Size10Mm">10 мм</option>
+												}
+												@if (product.ProductSize == DataGridView.Models.ProductSize.Size20Mm)
+												{
+													<option value="Size20Mm" selected>20 мм</option>
+												}
+												else
+												{
+													<option value="Size20Mm">20 мм</option>
+												}
+											</select>
+										</div>
+
+										<div class="mb-3">
+											<label class="form-label">Материал</label>
+											<select name="Material" class="form-select">
+												@if (product.Material == DataGridView.Models.Material.Steel)
+												{
+													<option value="Steel" selected>Сталь</option>
+												}
+												else
+												{
+													<option value="Steel">Сталь</option>
+												}
+												@if (product.Material == DataGridView.Models.Material.Copper)
+												{
+													<option value="Copper" selected>Медь</option>
+												}
+												else
+												{
+													<option value="Copper">Медь</option>
+												}
+												@if (product.Material == DataGridView.Models.Material.Iron)
+												{
+													<option value="Iron" selected>Железо</option>
+												}
+												else
+												{
+													<option value="Iron">Железо</option>
+												}
+												@if (product.Material == DataGridView.Models.Material.Chrome)
+												{
+													<option value="Chrome" selected>Хром</option>
+												}
+												else
+												{
+													<option value="Chrome">Хром</option>
+												}
+											</select>
+										</div>
+
+										<div class="mb-3">
+											<label class="form-label">Цена</label>
+											<!-- InvariantCulture гарантирует точку вместо запятой -->
+											<input name="Price" type="number" step="0.01" min="0.01" class="form-control"
+												   value="@product.Price.ToString("0.00", CultureInfo.InvariantCulture)" required />
+										</div>
+										<div class="mb-3">
+											<label class="form-label">Количество</label>
+											<input name="Quantity" type="number" min="0" class="form-control" value="@product.Quantity" required />
+										</div>
+										<div class="mb-3">
+											<label class="form-label">Минимальный запас</label>
+											<input name="MinQuantity" type="number" min="0" class="form-control" value="@product.MinQuantity" required />
+										</div>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+										<button type="submit" class="btn btn-primary">Сохранить</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+
+					<!-- Модалка удаления -->
+					<div class="modal fade" id="deleteModal-@product.Id" tabindex="-1">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<form asp-action="Delete" method="post">
+									<div class="modal-header">
+										<h5 class="modal-title">Удалить товар</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+									</div>
+									<div class="modal-body">
+										<p>Вы уверены, что хотите удалить этот товар?</p>
+										<p><strong>@product.ProductName</strong></p>
+										<input type="hidden" name="Id" value="@product.Id" />
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+										<button type="submit" class="btn btn-danger">Удалить</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				}
+			</tbody>
+		</table>
+
+		<div class="mb-3">
+			Всего товаров: @Model.Count
+		</div>
+	}
+
+	<!-- Кнопка добавления -->
+	<button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#createModal">
+		Добавить товар
+	</button>
 </div>
-<table class="table table-hover">
-    <thead>
-    <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Название</th>
-        <th scope="col">Размер</th>
-        <th scope="col">Материал</th>
-        <th scope="col">Цена</th>
-        <th scope="col">Количество</th>
-        <th scope="col">Мин. запас</th>
-        <th scope="col">Общая стоимость</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <th scope="row">@item.Id</th>
-            <td>@item.ProductName</td>
-            <td>@item.ProductSize</td>
-            <td>@item.Material</td>
-            <td>@item.Price.ToString("F2") ₽</td>
-            <td>@item.Quantity</td>
-            <td>@item.MinQuantity</td>
-            <td>@item.TotalAmount.ToString("F2") ₽</td>
-        </tr>
-    }
-    </tbody>
-</table>
+
+<!-- Модалка добавления -->
+<div class="modal fade" id="createModal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form asp-action="Create" method="post">
+				<div class="modal-header">
+					<h5 class="modal-title">Добавить товар</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				<div class="modal-body">
+					<div class="mb-3">
+						<label class="form-label">Название товара</label>
+						<input name="ProductName" class="form-control" required />
+					</div>
+					<div class="mb-3">
+						<label class="form-label">Размер</label>
+						<select name="ProductSize" class="form-select">
+							<option value="M6" selected>M6</option>
+							<option value="M8">M8</option>
+							<option value="M10">M10</option>
+							<option value="M12">M12</option>
+							<option value="Size10Mm">10 мм</option>
+							<option value="Size20Mm">20 мм</option>
+						</select>
+					</div>
+					<div class="mb-3">
+						<label class="form-label">Материал</label>
+						<select name="Material" class="form-select">
+							<option value="Steel" selected>Сталь</option>
+							<option value="Copper">Медь</option>
+							<option value="Iron">Железо</option>
+							<option value="Chrome">Хром</option>
+						</select>
+					</div>
+					<div class="mb-3">
+						<label class="form-label">Цена</label>
+						<input name="Price" type="number" step="0.01" min="0.01" class="form-control" value="0" required />
+					</div>
+					<div class="mb-3">
+						<label class="form-label">Количество</label>
+						<input name="Quantity" type="number" min="0" class="form-control" value="0" required />
+					</div>
+					<div class="mb-3">
+						<label class="form-label">Минимальный запас</label>
+						<input name="MinQuantity" type="number" min="0" class="form-control" value="0" required />
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+					<button type="submit" class="btn btn-primary">Сохранить</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
