@@ -1,0 +1,39 @@
+﻿@model IReadOnlyCollection<DataGridView.Models.Product>
+@{
+ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Реестр гвоздей</h1>
+    <p>Управление товарами на складе</p>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Название</th>
+        <th scope="col">Размер</th>
+        <th scope="col">Материал</th>
+        <th scope="col">Цена</th>
+        <th scope="col">Количество</th>
+        <th scope="col">Мин. запас</th>
+        <th scope="col">Общая стоимость</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <th scope="row">@item.Id</th>
+            <td>@item.ProductName</td>
+            <td>@item.ProductSize</td>
+            <td>@item.Material</td>
+            <td>@item.Price.ToString("F2") ₽</td>
+            <td>@item.Quantity</td>
+            <td>@item.MinQuantity</td>
+            <td>@item.TotalAmount.ToString("F2") ₽</td>
+        </tr>
+    }
+    </tbody>
+</table>

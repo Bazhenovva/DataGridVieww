@@ -1,12 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using DataGridView.Models;
+using DataGridView.Storage.Contracts;
 
 namespace DataGridView.Storage.MsSql;
 
 /// <summary>
 /// Контекст БД для работы с товарами через MS SQL Server.
 /// </summary>
-public class MsSqlProductContext : DbContext
+public class MsSqlProductContext : DbContext, IReader, IWriter
 {
     /// <summary>
     /// Набор данных товаров (<see cref="Product"/>).
@@ -17,18 +18,6 @@ public class MsSqlProductContext : DbContext
     /// Инициализирует контекст и создаёт БД при первом запуске.
     /// </summary>
     public MsSqlProductContext() => Database.EnsureCreated();
-
-    /// <summary>
-    /// Настраивает подключение к LocalDB.
-    /// </summary>
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            optionsBuilder.UseSqlServer(
-                @"Server=(localdb)\MSSQLLocalDB;Database=DataGridViewDb_v5;Trusted_Connection=True;");
-        }
-    }
 
     /// <summary>
     /// Преобразует <see cref="Material"/> и <see cref="ProductSize"/> в строку БД,
@@ -85,4 +74,31 @@ public class MsSqlProductContext : DbContext
             _ => ProductSize.M6
         };
     }
+    /// <summary>
+    ///
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <returns></returns>
+    public IQueryable<TEntity>Read<TEntity>() where TEntity :class
+    {
+        return base.Set<TEntity>()
+            .AsNoTracking()
+            .AsQueryable();
+    }
+
+    void IWriter.Add<TEntity>(TEntity entity)
+    {
+        base.Add(entity);
+    }
+
+    void IWriter.Update<TEntity>(TEntity entity)
+    {
+        base.Update(entity);
+    }
+
+    void IWriter.Delete<TEntity>(TEntity entity)
+    {
+        base.Remove(entity);
+    }
+
 }

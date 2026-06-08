@@ -5,6 +5,6 @@ namespace DataGridView.Storage.Contracts
     /// </summary>
     public interface IReader
     {
-
+        IQueryable<TEntity> Read<TEntity>() where TEntity : class;
     }
 }
