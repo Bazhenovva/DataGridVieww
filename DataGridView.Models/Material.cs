@@ -42,5 +42,20 @@ namespace DataGridView.Models
         {
             return name;
         }
+
+        /// <summary>
+        /// Преобразует строку из формы в объект Material
+        /// </summary>
+        public static Material Parse(string value)
+        {
+            return value switch
+            {
+                "Steel" => Steel,
+                "Copper" => Copper,
+                "Iron" => Iron,
+                "Chrome" => Chrome,
+                _ => Steel
+            };
+        }
     }
 }

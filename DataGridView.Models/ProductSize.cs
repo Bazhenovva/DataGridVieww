@@ -52,5 +52,23 @@ namespace DataGridView.Models
         {
             return name;
         }
+
+        /// <summary>
+        /// Преобразует строку из формы в объект ProductSize
+        /// </summary>
+
+        public static ProductSize Parse(string value)
+        {
+            return value switch
+            {
+                "M6" => M6,
+                "M8" => M8,
+                "M10" => M10,
+                "M12" => M12,
+                "Size10Mm" => Size10Mm,
+                "Size20Mm" => Size20Mm,
+                _ => M6
+            };
+        }
     }
 }
