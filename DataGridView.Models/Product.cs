@@ -25,12 +25,12 @@ namespace DataGridView.Models
         /// <summary>
         /// Размер товара
         /// </summary>
-        public ProductSize? ProductSize { get; set; }
+        public ProductSize ProductSize { get; set; }
 
         /// <summary>
         /// Материал товара
         /// </summary>
-        public Material? Material { get; set; }
+        public Material Material { get; set; }
 
         /// <summary>
         /// Цена за единицу товара
