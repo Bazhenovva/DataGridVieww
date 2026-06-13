@@ -64,7 +64,7 @@ namespace DataGridView.Models
         /// <summary>
         /// Создает товар с проверкой данных
         /// </summary>
-        public Product(string productName, ProductSize? productSize, Material? material,
+        public Product(string productName, ProductSize productSize, Material material,
                       int quantity, int minQuantity, decimal price)
         {
             if (string.IsNullOrWhiteSpace(productName))

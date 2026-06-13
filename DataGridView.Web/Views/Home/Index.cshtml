@@ -1,6 +1,6 @@
 ﻿@using System.Globalization
 @using DataGridView.Models
-@model System.ComponentModel.BindingList<DataGridView.Models.Product>
+@model System.Collections.Generic.IReadOnlyCollection<DataGridView.Models.Product>
 
 @{
     ViewData["Title"] = "Реестр товаров";
@@ -11,9 +11,7 @@
 
     @if (Model == null || Model.Count == 0)
     {
-        <div class="alert alert-info">
-            Товаров пока нет
-        </div>
+        <div class="alert alert-info">Товаров пока нет</div>
     }
     else
     {
@@ -39,17 +37,13 @@
                         <td>@product.ProductName</td>
                         <td>@product.ProductSize</td>
                         <td>@product.Material</td>
-                        <td>@product.Price.ToString("F2")</td>
+                        <td>@product.Price.ToString("F2", CultureInfo.InvariantCulture)</td>
                         <td>@product.Quantity</td>
                         <td>@product.MinQuantity</td>
-                        <td>@product.TotalAmount.ToString("F2")</td>
+                        <td>@product.TotalAmount.ToString("F2", CultureInfo.InvariantCulture)</td>
                         <td>
-                            <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#editModal-@product.Id">
-                                Изменить
-                            </button>
-                            <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#deleteModal-@product.Id">
-                                Удалить
-                            </button>
+                            <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#editModal-@product.Id">Изменить</button>
+                            <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#deleteModal-@product.Id">Удалить</button>
                         </td>
                     </tr>
 
@@ -67,113 +61,47 @@
 
                                         <div class="mb-3">
                                             <label class="form-label">Название товара</label>
-                                            <input name="ProductName" class="form-control" value="@product.ProductName" required />
+                                            <input name="ProductName" class="form-control" value="@product.ProductName" required minlength="3" maxlength="100" />
+                                            <span class="text-danger" data-valmsg-for="ProductName"></span>
                                         </div>
 
                                         <div class="mb-3">
                                             <label class="form-label">Размер</label>
                                             <select name="ProductSize" class="form-select">
-                                                @if (product.ProductSize == ProductSize.M6)
-                                                {
-                                                    <option value="M6" selected>M6</option>
-                                                }
-                                                else
-                                                {
-                                                    <option value="M6">M6</option>
-                                                }
-                                                @if (product.ProductSize == ProductSize.M8)
-                                                {
-                                                    <option value="M8" selected>M8</option>
-                                                }
-                                                else
-                                                {
-                                                    <option value="M8">M8</option>
-                                                }
-                                                @if (product.ProductSize == ProductSize.M10)
-                                                {
-                                                    <option value="M10" selected>M10</option>
-                                                }
-                                                else
-                                                {
-                                                    <option value="M10">M10</option>
-                                                }
-                                                @if (product.ProductSize == ProductSize.M12)
-                                                {
-                                                    <option value="M12" selected>M12</option>
-                                                }
-                                                else
-                                                {
-                                                    <option value="M12">M12</option>
-                                                }
-                                                @if (product.ProductSize == ProductSize.Size10Mm)
-                                                {
-                                                    <option value="Size10Mm" selected>10 мм</option>
-                                                }
-                                                else
-                                                {
-                                                    <option value="Size10Mm">10 мм</option>
-                                                }
-                                                @if (product.ProductSize == ProductSize.Size20Mm)
-                                                {
-                                                    <option value="Size20Mm" selected>20 мм</option>
-                                                }
-                                                else
-                                                {
-                                                    <option value="Size20Mm">20 мм</option>
-                                                }
+                                                @if (product.ProductSize == ProductSize.M6) { <option value="M6" selected>M6</option> } else { <option value="M6">M6</option> }
+                                                @if (product.ProductSize == ProductSize.M8) { <option value="M8" selected>M8</option> } else { <option value="M8">M8</option> }
+                                                @if (product.ProductSize == ProductSize.M10) { <option value="M10" selected>M10</option> } else { <option value="M10">M10</option> }
+                                                @if (product.ProductSize == ProductSize.M12) { <option value="M12" selected>M12</option> } else { <option value="M12">M12</option> }
+                                                @if (product.ProductSize == ProductSize.Size10Mm) { <option value="Size10Mm" selected>10 мм</option> } else { <option value="Size10Mm">10 мм</option> }
+                                                @if (product.ProductSize == ProductSize.Size20Mm) { <option value="Size20Mm" selected>20 мм</option> } else { <option value="Size20Mm">20 мм</option> }
                                             </select>
                                         </div>
 
                                         <div class="mb-3">
                                             <label class="form-label">Материал</label>
                                             <select name="Material" class="form-select">
-                                                @if (product.Material == Material.Steel)
-                                                {
-                                                    <option value="Steel" selected>Сталь</option>
-                                                }
-                                                else
-                                                {
-                                                    <option value="Steel">Сталь</option>
-                                                }
-                                                @if (product.Material == Material.Copper)
-                                                {
-                                                    <option value="Copper" selected>Медь</option>
-                                                }
-                                                else
-                                                {
-                                                    <option value="Copper">Медь</option>
-                                                }
-                                                @if (product.Material == Material.Iron)
-                                                {
-                                                    <option value="Iron" selected>Железо</option>
-                                                }
-                                                else
-                                                {
-                                                    <option value="Iron">Железо</option>
-                                                }
-                                                @if (product.Material == Material.Chrome)
-                                                {
-                                                    <option value="Chrome" selected>Хром</option>
-                                                }
-                                                else
-                                                {
-                                                    <option value="Chrome">Хром</option>
-                                                }
+                                                @if (product.Material == Material.Steel) { <option value="Steel" selected>Сталь</option> } else { <option value="Steel">Сталь</option> }
+                                                @if (product.Material == Material.Copper) { <option value="Copper" selected>Медь</option> } else { <option value="Copper">Медь</option> }
+                                                @if (product.Material == Material.Iron) { <option value="Iron" selected>Железо</option> } else { <option value="Iron">Железо</option> }
+                                                @if (product.Material == Material.Chrome) { <option value="Chrome" selected>Хром</option> } else { <option value="Chrome">Хром</option> }
                                             </select>
                                         </div>
 
                                         <div class="mb-3">
                                             <label class="form-label">Цена</label>
-                                            <input name="Price" type="number" step="0.01" min="0.01" class="form-control"
-                                                   value="@product.Price.ToString("0.00", CultureInfo.InvariantCulture)" required />
+                                            <input name="Price" type="number" step="0.01" min="0.01" max="999999" class="form-control"
+                                                   value="@product.Price.ToString("F2", CultureInfo.InvariantCulture)" required />
+                                            <span class="text-danger" data-valmsg-for="Price"></span>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Количество</label>
-                                            <input name="Quantity" type="number" min="0" class="form-control" value="@product.Quantity" required />
+                                            <input name="Quantity" type="number" min="0" max="100" class="form-control" value="@product.Quantity" required />
+                                            <span class="text-danger" data-valmsg-for="Quantity"></span>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Минимальный запас</label>
-                                            <input name="MinQuantity" type="number" min="0" class="form-control" value="@product.MinQuantity" required />
+                                            <input name="MinQuantity" type="number" min="0" max="100" class="form-control" value="@product.MinQuantity" required />
+                                            <span class="text-danger" data-valmsg-for="MinQuantity"></span>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -197,7 +125,7 @@
                                     <div class="modal-body">
                                         <p>Вы уверены, что хотите удалить этот товар?</p>
                                         <p><strong>@product.ProductName</strong></p>
-                                        <input type="hidden" name="Id" value="@product.Id" />
+                                        <input type="hidden" name="id" value="@product.Id" />
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
@@ -211,15 +139,11 @@
             </tbody>
         </table>
 
-        <div class="mb-3">
-            Всего товаров: @Model.Count
-        </div>
+        <div class="mb-3">Всего товаров: @Model.Count</div>
     }
 
     <!-- Кнопка добавления -->
-    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#createModal">
-        Добавить товар
-    </button>
+    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#createModal">Добавить товар</button>
 </div>
 
 <!-- Модалка добавления -->
@@ -234,7 +158,8 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Название товара</label>
-                        <input name="ProductName" class="form-control" required />
+                        <input name="ProductName" class="form-control" required minlength="3" maxlength="100" />
+                        <span class="text-danger" data-valmsg-for="ProductName"></span>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Размер</label>
@@ -258,15 +183,18 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Цена</label>
-                        <input name="Price" type="number" step="0.01" min="0.01" class="form-control" value="0" required />
+                        <input name="Price" type="number" step="0.01" min="0.01" max="999999" class="form-control" value="0" required />
+                        <span class="text-danger" data-valmsg-for="Price"></span>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Количество</label>
-                        <input name="Quantity" type="number" min="0" class="form-control" value="0" required />
+                        <input name="Quantity" type="number" min="0" max="100" class="form-control" value="0" required />
+                        <span class="text-danger" data-valmsg-for="Quantity"></span>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Минимальный запас</label>
-                        <input name="MinQuantity" type="number" min="0" class="form-control" value="0" required />
+                        <input name="MinQuantity" type="number" min="0" max="100" class="form-control" value="0" required />
+                        <span class="text-danger" data-valmsg-for="MinQuantity"></span>
                     </div>
                 </div>
                 <div class="modal-footer">

@@ -1,17 +1,17 @@
-using System.ComponentModel;
+using System.Collections.ObjectModel;
 using DataGridView.Models;
 
 namespace DataGridView.Services.Contracts
 {
     /// <summary>
-    /// Интерфейс сервиса для управления товарами в реестре 
+    /// Интерфейс сервиса для управления товарами в реестре
     /// </summary>
     public interface IProductService
     {
         /// <summary>
         /// Получить все товары
         /// </summary>
-        Task<BindingList<Product>> GetAllAsync();
+        Task<IReadOnlyCollection<Product>> GetAllAsync();
 
         /// <summary>
         /// Добавить новый товар

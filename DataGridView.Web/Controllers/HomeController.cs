@@ -31,26 +31,32 @@ public class HomeController : Controller
     }
 
     /// <summary>
-    /// Создаёт новый товар
+    /// Создаёт новый товар 
     /// </summary>
     [HttpPost]
     public async Task<IActionResult> Create(Product product)
     {
-        product.Material = Material.Parse(Request.Form["Material"].ToString());
-        product.ProductSize = ProductSize.Parse(Request.Form["ProductSize"].ToString());
+        if (!ModelState.IsValid)
+        {
+            var products = await productService.GetAllAsync();
+            return View("Index", products);
+        }
 
         await productService.AddAsync(product);
         return RedirectToAction(nameof(Index));
     }
 
     /// <summary>
-    /// Обновляет существующий товар
+    /// Обновляет существующий товар 
     /// </summary>
     [HttpPost]
     public async Task<IActionResult> Edit(Product product)
     {
-        product.Material = Material.Parse(Request.Form["Material"].ToString());
-        product.ProductSize = ProductSize.Parse(Request.Form["ProductSize"].ToString());
+        if (!ModelState.IsValid)
+        {
+            var products = await productService.GetAllAsync();
+            return View("Index", products);
+        }
 
         await productService.UpdateAsync(product);
         return RedirectToAction(nameof(Index));
@@ -60,9 +66,16 @@ public class HomeController : Controller
     /// Удаляет товар по Id
     /// </summary>
     [HttpPost]
-    public async Task<IActionResult> Delete(Product product)
+    public async Task<IActionResult> Delete(int id)
     {
-        await productService.DeleteAsync(product);
+        var products = await productService.GetAllAsync();
+        var product = products.FirstOrDefault(p => p.Id == id);
+
+        if (product != null)
+        {
+            await productService.DeleteAsync(product);
+        }
+
         return RedirectToAction(nameof(Index));
     }
 

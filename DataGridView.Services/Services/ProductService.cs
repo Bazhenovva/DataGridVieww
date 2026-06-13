@@ -1,4 +1,4 @@
-using System.ComponentModel;
+using System.Collections.ObjectModel;
 using DataGridView.Models;
 using DataGridView.Services.Contracts;
 using DataGridView.Storage.Contracts;
@@ -11,7 +11,7 @@ namespace DataGridView.Services.Services
     public class ProductService : IProductService
     {
         private readonly IProductStorage storage;
-        private BindingList<Product> products;
+        private List<Product> products;
 
         /// <summary>
         /// Инициализирует новый экземпляр сервиса
@@ -19,17 +19,17 @@ namespace DataGridView.Services.Services
         public ProductService(IProductStorage storage)
         {
             this.storage = storage;
-            products = new BindingList<Product>();
+            products = new List<Product>();
         }
 
         /// <summary>
         /// Асинхронно возвращает список всех товаров
         /// </summary>
-        public async Task<BindingList<Product>> GetAllAsync()
+        public async Task<IReadOnlyCollection<Product>> GetAllAsync()
         {
             var list = await storage.GetAllAsync();
-            products = new BindingList<Product>(list);
-            return products;
+            products = new List<Product>(list);
+            return products.AsReadOnly();
         }
 
         /// <summary>
@@ -57,7 +57,6 @@ namespace DataGridView.Services.Services
                 existing.Price = product.Price;
                 existing.MinQuantity = product.MinQuantity;
                 existing.Quantity = product.Quantity;
-                products.ResetItem(products.IndexOf(existing));
             }
         }
 
