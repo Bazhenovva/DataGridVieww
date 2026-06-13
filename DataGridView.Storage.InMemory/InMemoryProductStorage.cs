@@ -1,6 +1,4 @@
 using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
 using DataGridView.Models;
 using DataGridView.Models.Constants;
 using DataGridView.Storage.Contracts;
@@ -32,7 +30,7 @@ namespace DataGridView.Storage.InMemory
         /// <summary>
         /// Асинхронно получает все товары
         /// </summary>
-        public async Task<BindingList<Product>> GetAllAsync()
+        public async Task<IReadOnlyCollection<Product>> GetAllAsync()
         {
             return products;
         }

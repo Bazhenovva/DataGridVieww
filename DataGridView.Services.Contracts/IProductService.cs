@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using DataGridView.Models;
 
 namespace DataGridView.Services.Contracts

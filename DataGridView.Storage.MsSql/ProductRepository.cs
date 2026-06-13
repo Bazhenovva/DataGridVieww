@@ -1,7 +1,6 @@
 using System.ComponentModel;
 using DataGridView.Models;
 using DataGridView.Storage.Contracts;
-using Microsoft.EntityFrameworkCore;
 
 namespace DataGridView.Storage.MsSql;
 
@@ -25,7 +24,7 @@ public class ProductRepository : IProductStorage
     /// <summary>
     /// Асинхронно получает все товары из хранилища
     /// </summary>
-    public async Task<BindingList<Product>> GetAllAsync()
+    public async Task<IReadOnlyCollection<Product>> GetAllAsync()
     {
         var products = reader.Read<Product>()
             .OrderBy(p => p.ProductName)

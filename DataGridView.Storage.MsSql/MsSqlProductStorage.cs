@@ -15,7 +15,7 @@ public class MsSqlProductStorage(MsSqlProductContext context) : IProductStorage
     /// <summary>
     /// Асинхронно получает все товары
     /// </summary>
-    public async Task<BindingList<Product>> GetAllAsync()
+    public async Task<IReadOnlyCollection<Product>> GetAllAsync()
     {
         var result = await context.Products
             .AsNoTracking()
