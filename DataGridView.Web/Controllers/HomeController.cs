@@ -50,13 +50,15 @@ public class HomeController : Controller
     /// Обновляет существующий товар 
     /// </summary>
     [HttpPost]
-    public async Task<IActionResult> Edit(Product product)
+    public async Task<IActionResult> Edit(int id, Product product)
     {
         if (!ModelState.IsValid)
         {
             var products = await productService.GetAllAsync();
             return View("Index", products);
         }
+
+        product.Id = id;
 
         await productService.UpdateAsync(product);
         return RedirectToAction(nameof(Index));
