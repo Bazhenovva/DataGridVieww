@@ -1,56 +1,38 @@
 namespace DataGridView.Models
 {
     /// <summary>
-    /// Класс для представления размеров товара
+    /// Перечисление, представляющее размеры товара
     /// </summary>
-    public class ProductSize
+    public enum ProductSize
     {
         /// <summary>
         /// Размер M6
         /// </summary>
-        public static readonly ProductSize M6 = new("M6");
+        M6,
 
         /// <summary>
         /// Размер M8
         /// </summary>
-        public static readonly ProductSize M8 = new("M8");
+        M8,
 
         /// <summary>
         /// Размер M10
         /// </summary>
-        public static readonly ProductSize M10 = new("M10");
+        M10,
 
         /// <summary>
         /// Размер M12
         /// </summary>
-        public static readonly ProductSize M12 = new("M12");
+        M12,
 
         /// <summary>
         /// Размер 10 мм
         /// </summary>
-        public static readonly ProductSize Size10Mm = new("10 мм");
+        Size10Mm,
 
         /// <summary>
         /// Размер 20 мм
         /// </summary>
-        public static readonly ProductSize Size20Mm = new("20 мм");
-
-        private readonly string name;
-
-        /// <summary>
-        /// Приватный конструктор для создания экземпляра размера
-        /// </summary>
-        private ProductSize(string name)
-        {
-            this.name = name;
-        }
-
-        /// <summary>
-        /// Возвращает название размера в виде строки
-        /// </summary>
-        public override string ToString()
-        {
-            return name;
-        }
+        Size20Mm
     }
 }

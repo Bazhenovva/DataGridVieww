@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using System.Diagnostics;
 using DataGridView.Models;
 using DataGridView.Services.Contracts;
@@ -26,7 +25,7 @@ namespace DataGridView.Services.Services
         /// <summary>
         /// Асинхронный возврат всех товаров с логированием времени выполнения
         /// </summary>
-        public async Task<BindingList<Product>> GetAllAsync()
+        public async Task<IReadOnlyCollection<Product>> GetAllAsync()
         {
             var stopwatch = Stopwatch.StartNew();
             try

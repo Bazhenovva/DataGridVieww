@@ -25,12 +25,12 @@ namespace DataGridView.Models
         /// <summary>
         /// Размер товара
         /// </summary>
-        public ProductSize? ProductSize { get; set; }
+        public ProductSize ProductSize { get; set; }
 
         /// <summary>
         /// Материал товара
         /// </summary>
-        public Material? Material { get; set; }
+        public Material Material { get; set; }
 
         /// <summary>
         /// Цена за единицу товара
@@ -64,7 +64,7 @@ namespace DataGridView.Models
         /// <summary>
         /// Создает товар с проверкой данных
         /// </summary>
-        public Product(string productName, ProductSize? productSize, Material? material,
+        public Product(string productName, ProductSize productSize, Material material,
                       int quantity, int minQuantity, decimal price)
         {
             if (string.IsNullOrWhiteSpace(productName))
